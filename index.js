@@ -2,6 +2,7 @@ import fs from "fs";
 import { marked } from "marked";
 import psl from "psl";
 import json from "./build/feed.json" assert { type: "json" };
+const normalize = fs.readFileSync("./build/normalize.css").toString();
 
 // In theory, this will be the data that we get when we pull in each markdown
 // file. So from here, we'll have to add what else we need.
@@ -34,14 +35,10 @@ function template(data) {
     <meta charset="UTF-8" />
     <title>Jim Nielsen’s Notes</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css"
-    />
-    <link rel="stylesheet" href="/styles.css" />
     <link rel="shortcut icon" href="favicon.png" />
 
     <style>
+      ${normalize}
       :root {
         --c-highlight: hsl(200 100% 50%);
 
