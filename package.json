@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "fetch-data": "curl https://deploy-preview-34--jimniels-blog.netlify.app/feed.reading-notes.json --output ./build/feed.json",
+    "clean": "rm -rf ./build && mkdir ./build",
+    "start": "npm run clean && npm run fetch-data && node --watch --no-warnings index.js",
+    "build": "npm run clean && npm run fetch-data && node index.js"
+  },
+  "dependencies": {
+    "marked": "^4.2.12",
+    "psl": "^1.9.0"
+  }
+}
