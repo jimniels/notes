@@ -217,8 +217,30 @@ function template(data) {
     <header>
       <h1><span contenteditable>Jim Nielsen’s Notes</span></h1>
       <p>Stuff that strikes me as interesting. Fodder for <a href="https://blog.jim-nielsen.com">my blog</a>.</p>
-      <p>Subscribe to the <a href="/feed.xml">RSS</a> or <a href="/feed.json">JSON</a> feed.</p>
+
+      <nav>
+        <a
+          href="#${
+            data.items[Math.floor(Math.random() * data.items.length) + 20].id
+          }"
+          title="Shuffle"
+          class="js-shuffle">
+          Shuffle
+        </a>
+        <a href="/feed.xml">RSS Feed</a>
+        <a href="/feed.json">JSON Feed</a>
+      </nav>
     </header>
+    
+    <script>
+      const min = 20;
+      const max = ${data.items.length};
+      document.querySelector(".js-shuffle").addEventListener("click", (e) => {
+        e.preventDefault();
+        const rand = Math.floor(Math.random() * max) + min;
+        Array.from(document.querySelectorAll('article'))[rand].scrollIntoView();
+      });
+    </script>
     
     ${
       /*
@@ -255,7 +277,7 @@ function template(data) {
           external_url,
           _external_url_domain,
         }) => /*html*/ `
-        <article>
+        <article id="${id}">
           <p class="byline">
             <span>${_external_url_domain}</span> · <time datetime="${date_published}">${date_published.slice(
           0,
