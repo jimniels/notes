@@ -75,11 +75,11 @@ function template(data) {
         margin: 0 auto;
         color: var(--c-text);
       }
-      @media screen and (min-width: 1300px) {
+      @media screen and (min-width: 600px) {
         body {
           margin: 0 0 0 calc(1.618rem * 3);
         }
-        body:before {
+        /* body:before {
           content: "";
           position: fixed;
           right: 0;
@@ -87,7 +87,7 @@ function template(data) {
           bottom: 0;
           left: 50%;
           background: var(--c-fg);
-        }
+        } */
       }
       a {
         color: inherit;
@@ -103,7 +103,7 @@ function template(data) {
       }
       
       .byline {
-        opacity: .5;
+        color: var(--c-text-light);
         font-size: .8125rem;
         text-transform: uppercase;
         letter-spacing: .05rem;
@@ -122,68 +122,34 @@ function template(data) {
         margin: 4rem 0 5rem;
         position: relative;
       }
-      /* header:before,
-      header:after {
-        content: "";
-        width: 5rem;
-        height: 1px;
-        border-bottom: 1px dashed var(--c-highlight);
-        position: absolute;
-        
-      }
-      header:before {
-        left: -5rem;
-        top: 1.5rem;
-      }
-      header:after {
-        left: 25%;
-        top: 0rem;
-        transform: rotate(90deg);
-        transform-origin: 100% 0;
-      } */
       header h1 {
-        position: relative;
-        display: flex;
-      }
-      header h1 span {
-        box-shadow: 0 0 0 1px var(--c-highlight);
-        position: relative;
-      }
-      header h1:before,
-      header h1:after,
-      header h1 span:before,
-      header h1 span:after {
-        content: "";
-        width: 7px;
-        height: 7px;
-        position: absolute;
-        background: var(--c-bg);
-        border: 1px solid var(--c-highlight);
-        z-index: 1;
-      }
-      header h1:before {
-        top: -5px;
-        left: -5px;
+        line-height: 1;
       }
       header h1:after {
-        bottom: -5px;
-        left: -5px;
+        content: "";
+        width: .25rem;
+        height: 1.25em;
+        background-color: var(--c-highlight);
+        display: inline-block;
+        position: relative;
+        top: .2em;
+        animation: 1s blink step-end infinite;
       }
-      header h1 span:before {
-        top: -5px;
-        right: -5px;
-      }
-      header h1 span:after {
-        bottom: -5px;
-        right: -5px;
-      }
-
       header > * {
-        margin: 0;
+        margin: .5rem 0;
       }
       header p {
-        opacity: .5;
+        color: var(--c-text-light);
       }
+      @keyframes blink {
+        from, to {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+      
       article h1 {
         text-transform: uppercase;
         letter-spacing: 0.0125rem;
@@ -192,7 +158,7 @@ function template(data) {
         font-size: 1rem;
       }
       blockquote {
-        border-left: 1px solid #999;
+        border-left: 1px solid var(--c-text-light);
         margin: 0;
         padding-left: calc(1.618rem / 2);
       }
@@ -215,7 +181,7 @@ function template(data) {
   <body>
     
     <header>
-      <h1><span contenteditable>Jim Nielsen’s Notes</span></h1>
+      <h1>Jim Nielsen’s Notes</h1>
       <p>Stuff that strikes me as interesting. Fodder for <a href="https://blog.jim-nielsen.com">my blog</a>.</p>
 
       <nav>
