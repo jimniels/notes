@@ -1,8 +1,32 @@
 import fs from "fs";
+import path from "path";
 import { marked } from "marked";
 import psl from "psl";
 import json from "./build/feed.json" assert { type: "json" };
 const normalize = fs.readFileSync("./build/normalize.css").toString();
+
+const feedItems = fs
+  .readdirSync("./notes")
+  .filter((file) => file.endsWith(".md"))
+  .map((file) => {
+    const id = file.split(".")[0];
+
+    let dateISO = id.split("");
+    dateISO[id.lastIndexOf("-")] = ":";
+    dateISO = dateISO.join("") + "-0600"; // MDT -0600 from zulu
+
+    const md = fs.readFileSync(path.join("notes", file)).toString();
+    const [_, title, external_url] = md.match(/# \[(.+?)\]\((.+?)\)/);
+    return {
+      id,
+      content_html: marked.parse(md),
+      date_published: new Date(dateISO).toISOString(), // TODO MST
+      title,
+      url: `https://notes.jim-nielsen.com/${id}`,
+      external_url,
+      // tags": [
+    };
+  });
 
 // In theory, this will be the data that we get when we pull in each markdown
 // file. So from here, we'll have to add what else we need.
