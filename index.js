@@ -5,7 +5,15 @@ import psl from "psl";
 // import json from "./build/feed.json" assert { type: "json" };
 const normalize = fs.readFileSync("./build/normalize.css").toString();
 
-const feedItems = fs
+let jsonFeed = {
+  version: "https://jsonfeed.org/version/1",
+  title: "Jim Nielsen’s Blog Reading Notes",
+  home_page_url: "https://blog.jim-nielsen.com/tags/readingsNotes",
+  feed_url: "https://blog.jim-nielsen.com/feed.reading-notes.json",
+  items: [],
+};
+
+jsonFeed.items = fs
   .readdirSync("./notes")
   .filter((file) => file.endsWith(".md"))
   .reverse()
@@ -29,7 +37,9 @@ const feedItems = fs
         url: `https://notes.jim-nielsen.com/${id}`,
         external_url,
         _external_url_domain: psl.get(new URL(external_url).hostname),
-        ...(tags.length ? { tags } : {}),
+        ...(tags.length
+          ? { tags: tags.map((tag) => tag.replace("_", "")) }
+          : {}),
       };
     } catch (e) {
       console.log("Failed on:", file);
@@ -61,7 +71,8 @@ const feedItems = fs
 //     .concat(feedItems),
 // };
 
-fs.writeFileSync("./build/index.html", template({ items: feedItems }));
+fs.writeFileSync("./build/feed.json", JSON.stringify(jsonFeed, null, 2));
+fs.writeFileSync("./build/index.html", template(jsonFeed));
 
 function template(data) {
   return /*html*/ `<html lang="en">
@@ -81,6 +92,13 @@ function template(data) {
         --c-text-dark: hsl(0 0% 0%);
         --c-text: hsl(0 0% 20%);
         --c-text-light: hsl(0 0% 50%);
+
+        /* blue-ish */
+        --c-bg: hsl(221deg 70% 92%);
+          --c-fg: hsl(221deg 70% 100%);
+          --c-text-dark: hsl(0 0% 0%);
+          --c-text: hsl(221deg 70% 25%);
+          --c-text-light: hsl(221deg 40% 55%);
       }
       @media screen and (prefers-color-scheme: dark) {
         :root {
@@ -89,6 +107,15 @@ function template(data) {
           --c-text-dark: hsl(0 0% 100%);
           --c-text: hsl(0 0% 85%);
           --c-text-light: hsl(0 0% 70%);
+
+          /* blue-ish */
+          --c-bg: hsl(221deg 70% 7%);
+        --c-fg: hsl(221deg 50% 7%);
+        --c-text-dark: hsl(0 0% 100%);
+        --c-text: hsl(221deg 70% 95%);
+        --c-text-light: hsl(221deg 70% 64%);
+          
+          
         }
       }
       
@@ -129,9 +156,7 @@ function template(data) {
         color: var(--c-text-dark);
         background: var(--c-fg);
       }
-      article {
-        font-size: .875rem;
-      }
+      
       
       .byline {
         color: var(--c-text-light);
@@ -225,7 +250,7 @@ function template(data) {
       <nav>
         <a
           href="#${
-            data.items[Math.floor(Math.random() * data.items.length) + 20].id
+            data.items[Math.floor(Math.random() * data.items.length)].id
           }"
           title="Shuffle"
           class="js-shuffle">
@@ -325,7 +350,7 @@ function convertMdToContentPieces(markdown) {
 
     // If there are tags, split the into an array without the `#`
     // #html #css #js -> ["html", "css", "js"]
-    if (/^#[a-z]/.test(line)) {
+    if (/^#_[a-z]/.test(line)) {
       tags = line.split(" ").map((tag) => tag.slice(1));
       // Remove the line
       markdownByLine.splice(i, 1);

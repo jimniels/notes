@@ -10,8 +10,6 @@ import feed from "./feed.json" assert { type: "json" };
 feed.items.forEach(({ id, tags, content_text }) => {
   fs.writeFileSync(
     `./notes/${id.replace(":", "-")}.md`,
-    `${tags
-      .map((tag) => "#" + tag.replace("_", ""))
-      .join(" ")}\n\n${content_text}`
+    `${tags.map((tag) => "#" + tag).join(" ")}\n\n${content_text}`
   );
 });
