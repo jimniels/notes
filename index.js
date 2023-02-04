@@ -2,56 +2,66 @@ import fs from "fs";
 import path from "path";
 import { marked } from "marked";
 import psl from "psl";
-import json from "./build/feed.json" assert { type: "json" };
+// import json from "./build/feed.json" assert { type: "json" };
 const normalize = fs.readFileSync("./build/normalize.css").toString();
 
 const feedItems = fs
   .readdirSync("./notes")
   .filter((file) => file.endsWith(".md"))
+  .reverse()
   .map((file) => {
-    const id = file.split(".")[0];
+    try {
+      const id = file.split(".")[0];
 
-    let dateISO = id.split("");
-    dateISO[id.lastIndexOf("-")] = ":";
-    dateISO = dateISO.join("") + "-0600"; // MDT -0600 from zulu
+      let dateISO = id.split("");
+      dateISO[id.lastIndexOf("-")] = ":";
+      dateISO = dateISO.join("") + "-0600"; // MDT -0600 from zulu
 
-    const md = fs.readFileSync(path.join("notes", file)).toString();
-    const [_, title, external_url] = md.match(/# \[(.+?)\]\((.+?)\)/);
-    return {
-      id,
-      content_html: marked.parse(md),
-      date_published: new Date(dateISO).toISOString(), // TODO MST
-      title,
-      url: `https://notes.jim-nielsen.com/${id}`,
-      external_url,
-      // tags": [
-    };
+      const md = fs.readFileSync(path.join("./notes", file)).toString();
+      const { title, external_url, content_html, tags } =
+        convertMdToContentPieces(md);
+
+      return {
+        id,
+        content_html,
+        date_published: new Date(dateISO).toISOString(), // TODO MST
+        title,
+        url: `https://notes.jim-nielsen.com/${id}`,
+        external_url,
+        _external_url_domain: psl.get(new URL(external_url).hostname),
+        ...(tags.length ? { tags } : {}),
+      };
+    } catch (e) {
+      console.log("Failed on:", file);
+      console.log(e);
+    }
   });
 
 // In theory, this will be the data that we get when we pull in each markdown
 // file. So from here, we'll have to add what else we need.
-const enrichedJson = {
-  ...json,
-  items: json.items.map((item) => {
-    let newItem = {};
-    try {
-      newItem = {
-        ...item,
-        content_html: marked.parse(item.content_text),
-        _external_url_domain: item.external_url
-          ? psl.get(new URL(item.external_url).hostname)
-          : "",
-      };
-      return newItem;
-    } catch (e) {
-      console.log("Failed for", item.title);
-      console.log(e);
-      return item;
-    }
-  }),
-};
+// const enrichedJson = {
+//   ...json,
+//   items: json.items
+//     .map((item) => {
+//       let newItem = {};
+//       try {
+//         const [heading, ...mdLines] = item.content_text.split("\n");
+//         newItem = {
+//           ...item,
+//           content_html: marked.parse(mdLines.join("\n")),
 
-fs.writeFileSync("./build/index.html", template(enrichedJson));
+//         };
+//         return newItem;
+//       } catch (e) {
+//         console.log("Failed for", item.title);
+//         console.log(e);
+//         return item;
+//       }
+//     })
+//     .concat(feedItems),
+// };
+
+fs.writeFileSync("./build/index.html", template({ items: feedItems }));
 
 function template(data) {
   return /*html*/ `<html lang="en">
@@ -139,14 +149,14 @@ function template(data) {
         opacity: 0.75;
         border-bottom: 1px solid;
       }
-      header {
+      body > header {
         margin: 4rem 0 5rem;
         position: relative;
       }
-      header h1 {
+      body > header h1 {
         line-height: 1;
       }
-      header h1:after {
+      body > header h1:after {
         content: "";
         width: .25rem;
         height: 1.25em;
@@ -156,10 +166,10 @@ function template(data) {
         top: .2em;
         animation: 1s blink step-end infinite;
       }
-      header > * {
+      body > header > * {
         margin: .5rem 0;
       }
-      header p {
+      body > header p {
         color: var(--c-text-light);
       }
       @keyframes blink {
@@ -171,6 +181,13 @@ function template(data) {
         }
       }
       
+      article header {
+        display: flex;
+        flex-direction: column;
+      }
+      article header h1 {
+        order: 2;
+      }
       article h1 {
         text-transform: uppercase;
         letter-spacing: 0.0125rem;
@@ -265,12 +282,16 @@ function template(data) {
           _external_url_domain,
         }) => /*html*/ `
         <article id="${id}">
-          <p class="byline">
+          
+          <header>
+            <h1><a href="${external_url}">${title}</a></h1>
+            <p class="byline">
             <span>${_external_url_domain}</span> · <time datetime="${date_published}">${date_published.slice(
           0,
           10
         )}</time>
           </p>
+          </header>
           ${content_html}
         </article>
     `
@@ -283,4 +304,51 @@ function template(data) {
     </footer>
   </body>
 </html>`;
+}
+
+function convertMdToContentPieces(markdown) {
+  let title = "";
+  let external_url = "";
+  let html = "";
+  let tags = [];
+
+  // Extract `title` and `tags` from the markdown document
+  // Then convert everything else to HTML
+  //
+  // `tags` will (optionally) start the document as a single line of hashtags
+  //   #hashtag #myThing #design
+  // `title` will be the first <h1> in the document
+  //   # Title of my document
+  let markdownByLine = markdown.split("\n");
+  for (let i = 0; i < markdownByLine.length; i++) {
+    let line = markdownByLine[i];
+
+    // If there are tags, split the into an array without the `#`
+    // #html #css #js -> ["html", "css", "js"]
+    if (/^#[a-z]/.test(line)) {
+      tags = line.split(" ").map((tag) => tag.slice(1));
+      // Remove the line
+      markdownByLine.splice(i, 1);
+    }
+    // If it's the <h1>, extract it
+    else if (line.startsWith("# ")) {
+      const matches = line.match(/# \[(.+?)\]\((.+?)\)/);
+      title = matches[1];
+      external_url = matches[2];
+
+      // Remove the line
+      markdownByLine.splice(i, 1);
+      break;
+    }
+  }
+
+  // Convert markdown to HTML & get links data
+  const markdownSansTagsAndTitle = markdownByLine.join("\n");
+
+  return {
+    content_html: marked.parse(markdownSansTagsAndTitle),
+    title,
+    external_url,
+    tags,
+  };
 }

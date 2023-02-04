@@ -1,13 +1,13 @@
-# [notes.jim-nielsen.com](https://notes.jim-nielsen.com)
+# [links.jim-nielsen.com](https://links.jim-nielsen.com)
 
 - `npm run build`
 
 ## Content format
 
-All content follows this pattern (tags optional but prefixed with `n_`):
+All content follows this pattern (tags optional but prefixed with `n_`). **No exceptions.**
 
 ```md
-#n_article #n_twitter #n_rss
+#l_article #l_twitter #l_rss
 
 # [Five years of quitting Twitter](https://nolanlawson.com/2022/02/02/five-years-of-quitting-twitter/)
 

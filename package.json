@@ -2,10 +2,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "fetch-data": "curl https://deploy-preview-34--jimniels-blog.netlify.app/feed.reading-notes.json --output ./build/feed.json && cp ./node_modules/normalize.css/normalize.css ./build/normalize.css",
+    "fetch-data": "curl https://deploy-preview-34--jimniels-blog.netlify.app/feed.reading-notes.json --output ./feed.json",
+    "css": "cp ./node_modules/normalize.css/normalize.css ./build/normalize.css",
     "clean": "rm -rf ./build && mkdir ./build",
-    "start": "npm run clean && npm run fetch-data && node --watch --no-warnings index.js",
-    "build": "npm run clean && npm run fetch-data && node index.js"
+    "start": "npm run clean && npm run css && node --watch --no-warnings index.js",
+    "build": "npm run clean && npm run css && node index.js"
   },
   "dependencies": {},
   "devDependencies": {
