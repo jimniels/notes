@@ -4,6 +4,7 @@ import { marked } from "marked";
 import psl from "psl";
 // import json from "./build/feed.json" assert { type: "json" };
 const normalize = fs.readFileSync("./build/normalize.css").toString();
+const importSvg = (path) => fs.readFileSync(path).toString();
 
 let jsonFeed = {
   version: "https://jsonfeed.org/version/1",
@@ -95,7 +96,7 @@ function template(data) {
 
         /* blue-ish */
         --c-bg: hsl(221deg 70% 92%);
-          --c-fg: hsl(221deg 70% 100%);
+          --c-fg: hsl(221deg 100% 85%);
           --c-text-dark: hsl(0 0% 0%);
           --c-text: hsl(221deg 70% 25%);
           --c-text-light: hsl(221deg 40% 55%);
@@ -110,7 +111,7 @@ function template(data) {
 
           /* blue-ish */
           --c-bg: hsl(221deg 70% 7%);
-        --c-fg: hsl(221deg 50% 7%);
+        --c-fg: hsl(221deg 50% 27%);
         --c-text-dark: hsl(0 0% 100%);
         --c-text: hsl(221deg 70% 95%);
         --c-text-light: hsl(221deg 70% 64%);
@@ -228,16 +229,37 @@ function template(data) {
       article {
         margin-bottom: calc(1.618rem * 3);
       }
-
-      svg {
-        display: block;
-        margin: calc(1.618rem * 1.5) 0 calc(1.618rem * 3);
-      }
       
       footer {
-        margin: 120px 0 10px;
-        opacity: 0.5;
+        margin: calc(100vh - 6rem) 0 2rem;
+        color: var(--c-text-light);
         font-size: 0.75rem;
+      }
+
+
+      nav a {
+        border: none;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--c-text-light);
+      }
+      nav a:hover {
+        background: var(--c-text);
+      }
+      nav svg {
+        fill: var(--c-bg);
+      }
+
+      nav {
+        position: fixed;
+        left: 0;
+        top: 3rem;
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
       }
     </style>
   </head>
@@ -252,17 +274,19 @@ function template(data) {
           href="#${
             data.items[Math.floor(Math.random() * data.items.length)].id
           }"
-          title="Shuffle"
+          title="Jump to random post"
           class="js-shuffle">
-          Shuffle
+          ${importSvg("./icon-shuffle.svg")}
         </a>
-        <a href="/feed.xml">RSS Feed</a>
-        <a href="/feed.json">JSON Feed</a>
+        <a href="/feed.xml" title="RSS Feed">${importSvg("./icon-rss.svg")}</a>
+        <a href="/feed.json" title="JSON Feed">${importSvg(
+          "./icon-json.svg"
+        )}</a>
       </nav>
     </header>
     
     <script>
-      const min = 20;
+      const min = 0;
       const max = ${data.items.length};
       document.querySelector(".js-shuffle").addEventListener("click", (e) => {
         e.preventDefault();
@@ -326,6 +350,8 @@ function template(data) {
     </main>
     <footer>
       Holy cow, you made it all the way to the bottom? Look at you 👏
+      <br />
+      <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Here’s a special gift.</a>
     </footer>
   </body>
 </html>`;
