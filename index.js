@@ -95,11 +95,11 @@ function template(data) {
         --c-text-light: hsl(0 0% 50%);
 
         /* blue-ish */
-        --c-bg: hsl(221deg 70% 92%);
+        --c-bg: hsl(221deg 70% 97%);
           --c-fg: hsl(221deg 100% 85%);
           --c-text-dark: hsl(0 0% 0%);
-          --c-text: hsl(221deg 70% 25%);
-          --c-text-light: hsl(221deg 40% 55%);
+          --c-text: hsl(221deg 70% 20%);
+          --c-text-light: hsl(221deg 70% 40%);
       }
       @media screen and (prefers-color-scheme: dark) {
         :root {
