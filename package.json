@@ -5,8 +5,9 @@
     "fetch-data": "curl https://deploy-preview-34--jimniels-blog.netlify.app/feed.reading-notes.json --output ./feed.json",
     "css": "cp ./node_modules/normalize.css/normalize.css ./build/normalize.css",
     "clean": "rm -rf ./build && mkdir ./build",
-    "start": "npm run clean && npm run css && node --watch --no-warnings index.js",
-    "build": "npm run clean && npm run css && node index.js"
+    "pre": "npm run clean && npm run fetch-data && npm run css",
+    "start": "npm run pre && node --watch --no-warnings index.js",
+    "build": "npm run pre && node index.js"
   },
   "dependencies": {},
   "devDependencies": {

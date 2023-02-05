@@ -2,51 +2,54 @@ import fs from "fs";
 import path from "path";
 import { marked } from "marked";
 import psl from "psl";
-// import json from "./build/feed.json" assert { type: "json" };
+import remoteJsonFeed from "./feed.json" assert { type: "json" };
 const normalize = fs.readFileSync("./build/normalize.css").toString();
 const importSvg = (path) => fs.readFileSync(path).toString();
 
-let jsonFeed = {
-  version: "https://jsonfeed.org/version/1",
-  title: "Jim Nielsen’s Blog Reading Notes",
-  home_page_url: "https://blog.jim-nielsen.com/tags/readingsNotes",
-  feed_url: "https://blog.jim-nielsen.com/feed.reading-notes.json",
-  items: [],
-};
-
-jsonFeed.items = fs
+const localContent = fs
   .readdirSync("./notes")
   .filter((file) => file.endsWith(".md"))
   .reverse()
   .map((file) => {
-    try {
-      const id = file.split(".")[0];
+    const id = file.split(".")[0];
+    const md = fs.readFileSync(path.join("./notes", file)).toString();
+    return [id, md];
+  });
+const remoteContent = remoteJsonFeed.items.map(({ id, content_text }) => [
+  id,
+  content_text,
+]);
 
+let jsonFeed = {
+  version: "https://jsonfeed.org/version/1",
+  title: "Jim Nielsen’s Blog Reading Notes",
+  home_page_url: "https://notes.jim-nielsen.com",
+  feed_url: "https://notes.jim-nielsen.com/feed.json",
+  items: [...localContent, ...remoteContent].map(([id, md]) => {
+    try {
       let dateISO = id.split("");
       dateISO[id.lastIndexOf("-")] = ":";
       dateISO = dateISO.join("") + "-0600"; // MDT -0600 from zulu
 
-      const md = fs.readFileSync(path.join("./notes", file)).toString();
       const { title, external_url, content_html, tags } =
         convertMdToContentPieces(md);
 
       return {
         id,
         content_html,
-        date_published: new Date(dateISO).toISOString(), // TODO MST
+        date_published: new Date(dateISO).toISOString(),
         title,
-        url: `https://notes.jim-nielsen.com/${id}`,
+        url: `https://notes.jim-nielsen.com/#${id}`,
         external_url,
         _external_url_domain: psl.get(new URL(external_url).hostname),
-        ...(tags.length
-          ? { tags: tags.map((tag) => tag.replace("_", "")) }
-          : {}),
+        ...(tags.length ? { tags } : {}),
       };
     } catch (e) {
       console.log("Failed on:", file);
       console.log(e);
     }
-  });
+  }),
+};
 
 // In theory, this will be the data that we get when we pull in each markdown
 // file. So from here, we'll have to add what else we need.
@@ -72,7 +75,23 @@ jsonFeed.items = fs
 //     .concat(feedItems),
 // };
 
-fs.writeFileSync("./build/feed.json", JSON.stringify(jsonFeed, null, 2));
+fs.writeFileSync(
+  "./build/feed.json",
+  JSON.stringify(
+    {
+      ...jsonFeed,
+      items: jsonFeed.items.slice(0, 20).map((item) => {
+        // Filter out any key/value pairs that start with "_" because that's proprietary to us here
+        const keys = Object.keys(item);
+        return keys
+          .filter((key) => !key.startsWith("_"))
+          .reduce((acc, key) => ({ ...acc, [key]: item[key] }), {});
+      }),
+    },
+    null,
+    2
+  )
+);
 fs.writeFileSync("./build/index.html", template(jsonFeed));
 
 function template(data) {
@@ -367,7 +386,7 @@ function convertMdToContentPieces(markdown) {
   // Then convert everything else to HTML
   //
   // `tags` will (optionally) start the document as a single line of hashtags
-  //   #hashtag #myThing #design
+  //   #_hashtag #_myThing #_design
   // `title` will be the first <h1> in the document
   //   # Title of my document
   let markdownByLine = markdown.split("\n");
@@ -375,9 +394,9 @@ function convertMdToContentPieces(markdown) {
     let line = markdownByLine[i];
 
     // If there are tags, split the into an array without the `#`
-    // #html #css #js -> ["html", "css", "js"]
+    // #_html #_css #_js -> ["html", "css", "js"]
     if (/^#_[a-z]/.test(line)) {
-      tags = line.split(" ").map((tag) => tag.slice(1));
+      tags = line.split(" ").map((tag) => tag.slice(2));
       // Remove the line
       markdownByLine.splice(i, 1);
     }
