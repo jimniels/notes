@@ -9,10 +9,12 @@
     "start": "npm run pre && node --watch --no-warnings index.js",
     "build": "npm run pre && node index.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "html": "github:jimniels/html"
+  },
   "devDependencies": {
     "marked": "^4.2.12",
-    "psl": "^1.9.0",
-    "normalize.css": "^8.0.1"
+    "normalize.css": "^8.0.1",
+    "psl": "^1.9.0"
   }
 }

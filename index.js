@@ -1,10 +1,50 @@
 import fs from "fs";
 import path from "path";
+import html from "html";
 import { marked } from "marked";
 import psl from "psl";
 import remoteJsonFeed from "./feed.json" assert { type: "json" };
 const normalize = fs.readFileSync("./build/normalize.css").toString();
 const importSvg = (path) => fs.readFileSync(path).toString();
+
+const themes = {
+  "Cool night": {
+    highlight: "hsl(200 100% 50%)",
+    // bg: "#0d1321",
+    // fg: "#1d2d44",
+    // text: "#f0ebd8",
+    // "text-secondary": "#748cab",
+
+    bg: "hsl(0 0% 10%)",
+    fg: "hsl(0 0% 13%)",
+    text: "hsl(0 0% 85%)",
+    "text-secondary": "hsl(0 0% 70%)",
+  },
+
+  Halloween: {
+    highlight: "#eb5e28",
+    bg: "#252422",
+    fg: "#403d39",
+    text: "#fffcf2",
+    "text-secondary": "#ccc5b9",
+  },
+
+  Cadete: {
+    highlight: "#ef233c",
+    bg: "#2b2d42",
+    fg: "#8d99ae",
+    text: "#edf2f4",
+    "text-secondary": "#8d99ae",
+  },
+
+  YYY: {
+    highlight: "#00a8e8",
+    bg: "#00171f",
+    fg: "#003459",
+    text: "#ffffff",
+    "text-secondary": "#007ea7",
+  },
+};
 
 const localContent = fs
   .readdirSync("./notes")
@@ -51,30 +91,6 @@ let jsonFeed = {
   }),
 };
 
-// In theory, this will be the data that we get when we pull in each markdown
-// file. So from here, we'll have to add what else we need.
-// const enrichedJson = {
-//   ...json,
-//   items: json.items
-//     .map((item) => {
-//       let newItem = {};
-//       try {
-//         const [heading, ...mdLines] = item.content_text.split("\n");
-//         newItem = {
-//           ...item,
-//           content_html: marked.parse(mdLines.join("\n")),
-
-//         };
-//         return newItem;
-//       } catch (e) {
-//         console.log("Failed for", item.title);
-//         console.log(e);
-//         return item;
-//       }
-//     })
-//     .concat(feedItems),
-// };
-
 fs.writeFileSync(
   "./build/feed.json",
   JSON.stringify(
@@ -95,227 +111,214 @@ fs.writeFileSync(
 fs.writeFileSync("./build/index.html", template(jsonFeed));
 
 function template(data) {
-  return /*html*/ `<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Jim Nielsen’s Notes</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="favicon.png" />
+  const activeThemeName = Object.keys(themes)[0];
+  return html`<html lang="en" data-theme="${activeThemeName}">
+    <head>
+      <meta charset="UTF-8" />
+      <title>Jim Nielsen’s Notes</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="shortcut icon" href="favicon.png" />
 
-    <style>
-      ${normalize}
-      :root {
-        --c-highlight: hsl(200 100% 50%);
-
-        --c-bg: hsl(0 0% 100%);
-        --c-fg: hsl(0 0% 97%);
-        --c-text-dark: hsl(0 0% 0%);
-        --c-text: hsl(0 0% 20%);
-        --c-text-light: hsl(0 0% 50%);
-
-        /* blue-ish */
-        --c-bg: hsl(221deg 70% 97%);
-          --c-fg: hsl(221deg 100% 85%);
-          --c-text-dark: hsl(0 0% 0%);
-          --c-text: hsl(221deg 70% 20%);
-          --c-text-light: hsl(221deg 70% 40%);
-      }
-      @media screen and (prefers-color-scheme: dark) {
-        :root {
-          --c-bg: hsl(0 0% 10%);
-          --c-fg: hsl(0 0% 13%);
-          --c-text-dark: hsl(0 0% 100%);
-          --c-text: hsl(0 0% 85%);
-          --c-text-light: hsl(0 0% 70%);
-
-          /* blue-ish */
-          --c-bg: hsl(221deg 70% 7%);
-        --c-fg: hsl(221deg 50% 27%);
-        --c-text-dark: hsl(0 0% 100%);
-        --c-text: hsl(221deg 70% 95%);
-        --c-text-light: hsl(221deg 70% 64%);
-          
-          
+      <style>
+        ${normalize}
+          ${Object.entries(themes).map(
+            ([name, colors]) => html`
+              :root[data-theme="${name}"] {
+              ${Object.entries(colors).map(
+                ([key, value]) => `--c-${key}: ${value};`
+              )}
+              }
+            `
+          )}
+          html {
+          background: var(--c-bg);
         }
-      }
-      
-      html {
-        background: var(--c-bg);
-      }
-      html, body {
-        font-size: 1em;
-      }
-      body {
-        font-family: Verdana, "Helvetica Neue", sans-serif;
-        line-height: 1.5;
-        max-width: 30rem;
-        width: 90%;
-        margin: 0 auto;
-        color: var(--c-text);
-      }
-      @media screen and (min-width: 600px) {
+        html,
         body {
-          margin: 0 0 0 calc(1.618rem * 3);
+          font-size: 1em;
         }
-        /* body:before {
+        body {
+          font-family: Verdana, "Helvetica Neue", sans-serif;
+          line-height: 1.5;
+          max-width: 30rem;
+          width: 90%;
+          margin: 0 auto;
+          color: var(--c-text);
+        }
+
+        a {
+          color: inherit;
+          text-decoration: none;
+          border-bottom: 1px solid;
+        }
+        a:hover {
+          background: var(--c-highlight);
+          color: var(--c-text);
+        }
+
+        pre {
+          overflow: scroll;
+        }
+
+        article > header > p {
+          color: var(--c-text-secondary);
+          font-size: 0.8125rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05rem;
+          margin-bottom: 0;
+        }
+        article > footer {
+          color: var(--c-text-secondary);
+          font-size: 0.8125rem;
+          margin-bottom: 0;
+        }
+        article > footer > ul {
+          display: flex;
+          list-style-type: none;
+          gap: 0.5rem;
+          padding: 0;
+        }
+        article > footer > ul li:not(:last-child):after {
+          content: " · ";
+          padding: 0 0.25rem;
+        }
+        time a {
+          border-bottom: none;
+        }
+        time a:hover {
+          opacity: 0.75;
+          border-bottom: 1px solid;
+        }
+        body > header {
+          margin: 4rem 0 5rem;
+          position: relative;
+        }
+        body > header h1 {
+          line-height: 1;
+        }
+        body > header h1:after {
           content: "";
+          width: 0.25rem;
+          height: 1.25em;
+          background-color: var(--c-highlight);
+          display: inline-block;
+          position: relative;
+          top: 0.2em;
+          animation: 1s blink step-end infinite;
+        }
+        body > header > * {
+          margin: 0.5rem 0;
+        }
+        body > header p {
+          color: var(--c-text-secondary);
+        }
+        @keyframes blink {
+          from,
+          to {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0;
+          }
+        }
+
+        article header {
+          display: flex;
+          flex-direction: column;
+        }
+        article header h1 {
+          order: 2;
+        }
+        article h1 {
+          text-transform: uppercase;
+          letter-spacing: 0.0125rem;
+        }
+        article :is(h1, h2, h3, h4) {
+          font-size: 1rem;
+        }
+        blockquote {
+          border-left: 1px solid var(--c-highlight);
+          margin: 0;
+          padding-left: calc(1.618rem / 2);
+        }
+        article {
+          margin-bottom: 8rem;
+          padding-top: 2.5rem;
+          overflow-wrap: break-word;
+        }
+
+        body > footer {
+          margin: calc(100vh - 6rem) 0 2rem;
+          color: var(--c-text-secondary);
+          font-size: 0.75rem;
+        }
+
+        .highlight {
+          color: var(--c-highlight);
+        }
+
+        nav a {
+          border: none;
+          width: 2.5rem;
+          height: 2.5rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--c-text-secondary);
+        }
+
+        nav svg {
+          fill: var(--c-bg);
+        }
+
+        nav {
           position: fixed;
-          right: 0;
-          top: 0;
           bottom: 0;
-          left: 50%;
-          background: var(--c-fg);
-        } */
-      }
-      a {
-        color: inherit;
-        text-decoration: none;
-        border-bottom: 1px solid;
-      }
-      a:hover {
-        color: var(--c-text-dark);
-        background: var(--c-fg);
-      }
-      
-      
-      .byline {
-        color: var(--c-text-light);
-        font-size: .8125rem;
-        text-transform: uppercase;
-        letter-spacing: .05rem;
-        margin-bottom: 0;
-        font-size: .75rem;
-
-      }
-      time a {
-        border-bottom: none;
-      }
-      time a:hover {
-        opacity: 0.75;
-        border-bottom: 1px solid;
-      }
-      body > header {
-        margin: 4rem 0 5rem;
-        position: relative;
-      }
-      body > header h1 {
-        line-height: 1;
-      }
-      body > header h1:after {
-        content: "";
-        width: .25rem;
-        height: 1.25em;
-        background-color: var(--c-highlight);
-        display: inline-block;
-        position: relative;
-        top: .2em;
-        animation: 1s blink step-end infinite;
-      }
-      body > header > * {
-        margin: .5rem 0;
-      }
-      body > header p {
-        color: var(--c-text-light);
-      }
-      @keyframes blink {
-        from, to {
-          opacity: 1;
+          right: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
         }
-        50% {
-          opacity: 0;
+
+        @media screen and (min-width: 600px) {
+          body {
+            margin: 0 0 0 6rem;
+          }
+          nav {
+            left: 0;
+            top: 3rem;
+          }
         }
-      }
-      
-      article header {
-        display: flex;
-        flex-direction: column;
-      }
-      article header h1 {
-        order: 2;
-      }
-      article h1 {
-        text-transform: uppercase;
-        letter-spacing: 0.0125rem;
-      }
-      article :is(h1, h2, h3, h4) {
-        font-size: 1rem;
-      }
-      blockquote {
-        border-left: 1px solid var(--c-text-light);
-        margin: 0;
-        padding-left: calc(1.618rem / 2);
-      }
-      article {
-        margin-bottom: calc(1.618rem * 3);
-      }
-      
-      footer {
-        margin: calc(100vh - 6rem) 0 2rem;
-        color: var(--c-text-light);
-        font-size: 0.75rem;
-      }
+      </style>
+    </head>
+    <body>
+      <header>
+        <h1>Jim Nielsen’s Notes</h1>
+        <p>
+          Stuff that strikes me as interesting. Fodder for
+          <a href="https://blog.jim-nielsen.com">my blog</a>.
+        </p>
 
+        <nav>
+          <a
+            href="#${data.items[Math.floor(Math.random() * data.items.length)]
+              .id}"
+            title="Jump to random note"
+            class="js-shuffle"
+          >
+            ${importSvg("./icon-shuffle.svg")}
+          </a>
+          <a href="/feed.xml" title="RSS Feed"
+            >${importSvg("./icon-rss.svg")}</a
+          >
+          <a href="/feed.json" title="JSON Feed"
+            >${importSvg("./icon-json.svg")}</a
+          >
+        </nav>
+      </header>
 
-      nav a {
-        border: none;
-        width: 2.5rem;
-        height: 2.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--c-text-light);
-      }
-      nav a:hover {
-        background: var(--c-text);
-      }
-      nav svg {
-        fill: var(--c-bg);
-      }
-
-      nav {
-        position: fixed;
-        left: 0;
-        top: 3rem;
-        display: flex;
-        flex-direction: column;
-        gap: .5rem;
-      }
-    </style>
-  </head>
-  <body>
-    
-    <header>
-      <h1>Jim Nielsen’s Notes</h1>
-      <p>Stuff that strikes me as interesting. Fodder for <a href="https://blog.jim-nielsen.com">my blog</a>.</p>
-
-      <nav>
-        <a
-          href="#${
-            data.items[Math.floor(Math.random() * data.items.length)].id
-          }"
-          title="Jump to random post"
-          class="js-shuffle">
-          ${importSvg("./icon-shuffle.svg")}
-        </a>
-        <a href="/feed.xml" title="RSS Feed">${importSvg("./icon-rss.svg")}</a>
-        <a href="/feed.json" title="JSON Feed">${importSvg(
-          "./icon-json.svg"
-        )}</a>
-      </nav>
-    </header>
-    
-    <script>
-      const min = 0;
-      const max = ${data.items.length};
-      document.querySelector(".js-shuffle").addEventListener("click", (e) => {
-        e.preventDefault();
-        const rand = Math.floor(Math.random() * max) + min;
-        Array.from(document.querySelectorAll('article'))[rand].scrollIntoView();
-      });
-    </script>
-    
-    ${
-      /*
+      ${
+        /*
     <select>
     ${Object.entries(
       data.items.reduce((acc, item) => {
@@ -335,45 +338,65 @@ function template(data) {
           `<option value="${count}">${domain} (${count})</option>`
       )}
     </select>*/ ""
-    }
-    <main>
-    ${data.items
-      .map(
-        ({
-          id,
-          content_html,
-          content_text,
-          date_published,
-          title,
-          url,
-          external_url,
-          _external_url_domain,
-        }) => /*html*/ `
-        <article id="${id}">
-          
-          <header>
-            <h1><a href="${external_url}">${title}</a></h1>
-            <p class="byline">
-            <span>${_external_url_domain}</span> · <time datetime="${date_published}">${date_published.slice(
-          0,
-          10
-        )}</time>
-          </p>
-          </header>
-          ${content_html}
-        </article>
-    `
-      )
-      .join("")}
-      
-    </main>
-    <footer>
-      Holy cow, you made it all the way to the bottom? Look at you 👏
-      <br />
-      <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Here’s a special gift.</a>
-    </footer>
-  </body>
-</html>`;
+      }
+      <main>
+        ${data.items
+          .map(
+            ({
+              id,
+              content_html,
+              content_text,
+              date_published,
+              title,
+              url,
+              external_url,
+              _external_url_domain,
+              tags,
+            }) => html`
+              <article id="${id}">
+                <header>
+                  <h1><a href="${external_url}">${title}</a></h1>
+                  <p class="byline">
+                    <span class="highlight">${_external_url_domain}</span>
+                  </p>
+                </header>
+                ${content_html}
+                <footer class="de-emphasized">
+                  <ul>
+                    <li>
+                      <time datetime="${date_published}">
+                        ${date_published.slice(0, 10)}
+                      </time>
+                    </li>
+                    ${tags.length ? tags.map((tag) => `<li>#${tag}</li>`) : ""}
+                  </ul>
+                </footer>
+              </article>
+            `
+          )
+          .join("")}
+      </main>
+      <footer>
+        Holy cow, you made it all the way to the bottom? Look at you 👏
+        <br />
+        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+          >Here’s a special gift.</a
+        >
+      </footer>
+
+      <script>
+        const min = 0;
+        const max = ${data.items.length};
+        document.querySelector(".js-shuffle").addEventListener("click", (e) => {
+          e.preventDefault();
+          const rand = Math.floor(Math.random() * max) + min;
+          Array.from(document.querySelectorAll("article"))[
+            rand
+          ].scrollIntoView();
+        });
+      </script>
+    </body>
+  </html>`;
 }
 
 function convertMdToContentPieces(markdown) {
@@ -421,4 +444,44 @@ function convertMdToContentPieces(markdown) {
     external_url,
     tags,
   };
+}
+
+function Theme() {
+  return html`
+    <form id="js-theme">
+      ${Object.entries(themes)
+        .map(
+          ([name, colors]) => html`<label>
+            <input
+              type="radio"
+              name="theme"
+              value="${name}"
+              ${name === activeThemeName && "checked"}
+            />
+            ${name}
+            <ul style="display: flex; list-style-type: none;">
+              ${Object.values(colors).map(
+                (value) => html`<li
+                  style="
+                width: 24px;
+                height: 24px;
+                background-color: ${value};
+                box-shadow: 0 0 0 2px white;
+                border-radius: 50%;"
+                ></li>`
+              )}
+            </ul>
+          </label>`
+        )
+        .join("")}
+    </form>
+
+    <script>
+      const t = ${JSON.stringify(themes)};
+      document.querySelector("#js-theme").addEventListener("change", (e) => {
+        const activeTheme = e.target.value;
+        document.documentElement.setAttribute("data-theme", activeTheme);
+      });
+    </script>
+  `;
 }
