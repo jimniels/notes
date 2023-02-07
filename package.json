@@ -2,10 +2,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "fetch-data": "curl https://deploy-preview-34--jimniels-blog.netlify.app/feed.reading-notes.json --output ./feed.json",
-    "css": "cp ./node_modules/normalize.css/normalize.css ./build/normalize.css",
+    "fetch-data": "curl https://blog.jim-nielsen.com/feed.reading-notes.json --output ./feed.json",
     "clean": "rm -rf ./build && mkdir ./build",
-    "pre": "npm run clean && npm run fetch-data && npm run css",
+    "pre": "npm run clean && npm run fetch-data",
     "start": "npm run pre && node --watch --no-warnings index.js",
     "build": "npm run pre && node index.js"
   },

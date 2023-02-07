@@ -1,48 +1,55 @@
 import fs from "fs";
-import path from "path";
 import html from "html";
 import { marked } from "marked";
 import psl from "psl";
 import remoteJsonFeed from "./feed.json" assert { type: "json" };
-const normalize = fs.readFileSync("./build/normalize.css").toString();
+const normalize = fs
+  .readFileSync("./node_modules/normalize.css/normalize.css")
+  .toString();
 const importSvg = (path) => fs.readFileSync(path).toString();
 
 const themes = {
-  "Cool night": {
-    highlight: "hsl(200 100% 50%)",
-    // bg: "#0d1321",
-    // fg: "#1d2d44",
-    // text: "#f0ebd8",
-    // "text-secondary": "#748cab",
-
-    bg: "hsl(0 0% 10%)",
-    fg: "hsl(0 0% 13%)",
-    text: "hsl(0 0% 85%)",
-    "text-secondary": "hsl(0 0% 70%)",
-  },
-
-  Halloween: {
-    highlight: "#eb5e28",
-    bg: "#252422",
-    fg: "#403d39",
-    text: "#fffcf2",
-    "text-secondary": "#ccc5b9",
-  },
-
-  Cadete: {
-    highlight: "#ef233c",
-    bg: "#2b2d42",
-    fg: "#8d99ae",
-    text: "#edf2f4",
-    "text-secondary": "#8d99ae",
-  },
-
-  YYY: {
-    highlight: "#00a8e8",
+  Yamble: {
     bg: "#00171f",
-    fg: "#003459",
     text: "#ffffff",
     "text-secondary": "#007ea7",
+    highlight: "#00a8e8",
+  },
+  Halloween: {
+    bg: "#252422",
+    text: "#fffcf2",
+    "text-secondary": "#ccc5b9",
+    highlight: "#eb5e28",
+  },
+  Cadete: {
+    bg: "#2b2d42",
+    text: "#edf2f4",
+    "text-secondary": "#8d99ae",
+    highlight: "#ef233c",
+  },
+  Zizzoo: {
+    bg: "#000000",
+    text: "#ffffff",
+    "text-secondary": "#999",
+    highlight: "#fca311",
+  },
+  Valentines: {
+    bg: "#590d22",
+    text: "#fff0f3",
+    "text-secondary": "#ff8fa3",
+    highlight: "#ff4d6d",
+  },
+  Platnak: {
+    bg: "#ffffff",
+    text: "#326273",
+    "text-secondary": "#5c9ead",
+    highlight: "#e39774",
+  },
+  WWW: {
+    bg: "#fff",
+    text: "#000",
+    "text-secondary": "#999",
+    highlight: "#0000EE",
   },
 };
 
@@ -52,7 +59,7 @@ const localContent = fs
   .reverse()
   .map((file) => {
     const id = file.split(".")[0];
-    const md = fs.readFileSync(path.join("./notes", file)).toString();
+    const md = fs.readFileSync(`./notes/${file}`).toString();
     return [id, md];
   });
 const remoteContent = remoteJsonFeed.items.map(({ id, content_text }) => [
@@ -133,6 +140,7 @@ function template(data) {
           html {
           background: var(--c-bg);
         }
+
         html,
         body {
           font-size: 1em;
@@ -206,7 +214,7 @@ function template(data) {
           top: 0.2em;
           animation: 1s blink step-end infinite;
         }
-        body > header > * {
+        body > header > :is(h1, p) {
           margin: 0.5rem 0;
         }
         body > header p {
@@ -277,7 +285,8 @@ function template(data) {
           right: 0;
           display: flex;
           flex-direction: column;
-          gap: 0.5rem;
+          gap: 1px;
+          width: fit-content;
         }
 
         @media screen and (min-width: 600px) {
@@ -317,6 +326,7 @@ function template(data) {
         </nav>
       </header>
 
+      ${/*Theme({ activeThemeName })*/ ""}
       ${
         /*
     <select>
@@ -446,7 +456,7 @@ function convertMdToContentPieces(markdown) {
   };
 }
 
-function Theme() {
+function Theme({ activeThemeName }) {
   return html`
     <form id="js-theme">
       ${Object.entries(themes)
