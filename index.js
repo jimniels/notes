@@ -139,6 +139,7 @@ function template(data) {
           )}
           html {
           background: var(--c-bg);
+          scroll-behavior: smooth;
         }
 
         html,
