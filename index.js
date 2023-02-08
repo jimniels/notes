@@ -1,8 +1,15 @@
+// TODO favicon
+// TODO rss xml feed (+ <meta>)
+// TODO <meta> feeds from jim-nielsen.com
+// TODO blog post
+
 import fs from "fs";
 import html from "html";
 import { marked } from "marked";
 import psl from "psl";
 import remoteJsonFeed from "./feed.json" assert { type: "json" };
+import jsonfeedToRSS from "jsonfeed-to-rss";
+
 const normalize = fs
   .readFileSync("./node_modules/normalize.css/normalize.css")
   .toString();
@@ -50,6 +57,18 @@ const themes = {
     text: "#000",
     "text-secondary": "#999",
     highlight: "#0000EE",
+  },
+  Woods: {
+    bg: "#fefae0",
+    text: "#283618",
+    "text-secondary": "#606c38",
+    highlight: "#bc6c25",
+  },
+  Jazz: {
+    bg: "#03071e",
+    text: "#fff9e8",
+    "text-secondary": "#f48c06",
+    highlight: "#dc2f02",
   },
 };
 
@@ -116,6 +135,8 @@ fs.writeFileSync(
   )
 );
 fs.writeFileSync("./build/index.html", template(jsonFeed));
+// fs.writeFileSync("./build/feed.xml", XMLFeed(jsonFeed));
+fs.writeFileSync("./build/feed.xml", jsonfeedToRSS(jsonFeed));
 
 function template(data) {
   const activeThemeName = Object.keys(themes)[0];
@@ -161,8 +182,8 @@ function template(data) {
           border-bottom: 1px solid;
         }
         a:hover {
-          background: var(--c-highlight);
-          color: var(--c-text);
+          color: var(--c-highlight);
+          border-bottom: 2px solid var(--c-highlight);
         }
 
         pre {
@@ -267,13 +288,16 @@ function template(data) {
         }
 
         nav a {
-          border: none;
+          border: none !important;
           width: 2.5rem;
           height: 2.5rem;
           display: flex;
           align-items: center;
           justify-content: center;
           background: var(--c-text-secondary);
+        }
+        nav a:hover {
+          background: var(--c-highlight);
         }
 
         nav svg {
@@ -296,7 +320,7 @@ function template(data) {
           }
           nav {
             left: 0;
-            top: 3rem;
+            top: 4rem;
           }
         }
       </style>
@@ -310,6 +334,7 @@ function template(data) {
         </p>
 
         <nav>
+          <a href="#js-theme">${importSvg("./icon-paint.svg")}</a>
           <a
             href="#${data.items[Math.floor(Math.random() * data.items.length)]
               .id}"
@@ -327,7 +352,7 @@ function template(data) {
         </nav>
       </header>
 
-      ${/*Theme({ activeThemeName })*/ ""}
+      ${Theme({ activeThemeName })}
       ${
         /*
     <select>
@@ -459,6 +484,82 @@ function convertMdToContentPieces(markdown) {
 
 function Theme({ activeThemeName }) {
   return html`
+    <style>
+      [data-open-theme] form {
+        top: 0;
+      }
+      form {
+        display: flex;
+        position: fixed;
+        top: -4rem;
+        font-size: 0.875rem;
+        left: 0;
+        right: 0;
+        /* border-bottom: 1px solid var(--c-text-secondary); */
+        background: var(--c-bg);
+        /* padding: 10px 0; */
+        overflow: scroll;
+        width: 100%;
+        gap: 1.5rem;
+        transition: 0.3s ease top;
+
+        scrollbar-width: none;
+      }
+      form::-webkit-scrollbar {
+        display: none;
+      }
+      /* form:after {
+        content: "";
+        background: linear-gradient(90deg, var(--c-bg), transparent);
+        height: 1rem;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+      } */
+      form label {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        border-top: 3px solid transparent;
+        position: relative;
+      }
+      form label:before {
+        content: "";
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 6px solid transparent;
+
+        position: absolute;
+        left: 50%;
+        top: 0;
+      }
+      form label:has(> input:checked),
+      form label:has(> input:checked):before {
+        border-top-color: var(--c-highlight);
+      }
+      form input {
+        display: none;
+      }
+      form span {
+      }
+      form ul {
+        display: flex;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+      form ul li {
+        width: 18px;
+        height: 18px;
+        box-shadow: 0 0 0 2px white, 0 0 0 4px var(--c-bg),
+          inset 0 0 0 1px rgb(0 0 0 / 10%);
+        border-radius: 50%;
+      }
+    </style>
     <form id="js-theme">
       ${Object.entries(themes)
         .map(
@@ -469,17 +570,10 @@ function Theme({ activeThemeName }) {
               value="${name}"
               ${name === activeThemeName && "checked"}
             />
-            ${name}
-            <ul style="display: flex; list-style-type: none;">
+            <span>${name}</span>
+            <ul>
               ${Object.values(colors).map(
-                (value) => html`<li
-                  style="
-                width: 24px;
-                height: 24px;
-                background-color: ${value};
-                box-shadow: 0 0 0 2px white;
-                border-radius: 50%;"
-                ></li>`
+                (value) => html`<li style="background-color: ${value}"></li>`
               )}
             </ul>
           </label>`
@@ -488,11 +582,94 @@ function Theme({ activeThemeName }) {
     </form>
 
     <script>
-      const t = ${JSON.stringify(themes)};
+      // Initial page load
+      const theme = localStorage.getItem("theme");
+      const defaultTheme = "${activeThemeName}";
+      if (!theme) {
+        localStorage.setItem("theme", defaultTheme);
+      } else if (theme !== defaultTheme) {
+        localStorage.setItem("theme", theme);
+        document.documentElement.dataset.theme = theme;
+        document.querySelector(
+          "input[name=theme][value='" + theme + "']"
+        ).checked = true;
+      }
+
+      // Setup listener on change
       document.querySelector("#js-theme").addEventListener("change", (e) => {
         const activeTheme = e.target.value;
         document.documentElement.setAttribute("data-theme", activeTheme);
+        localStorage.setItem("theme", activeTheme);
       });
+
+      // Navigation theme
+      /*document.addEventListener("click", () => {
+        console.log(document.documentElement.dataset.openTheme);
+        if (document.documentElement.dataset.openTheme) {
+          console.log("fired general click");
+          window.location.hash = "";
+        }
+      });
+      document.querySelector("#js-theme").addEventListener("click", (e) => {
+        e.stopPropagation();
+      });*/
+      document
+        .querySelector("a[href*='js-theme']")
+        .addEventListener("click", (e) => {
+          console.log("clicked");
+          const isOpen = document.documentElement.dataset.openTheme;
+          if (isOpen) {
+            document.documentElement.removeAttribute("data-open-theme");
+          } else {
+            document.documentElement.setAttribute("data-open-theme", "true");
+          }
+        });
     </script>
   `;
+}
+
+function XMLFeed(site) {
+  return /*xml*/ `<?xml version="1.0" encoding="UTF-8"?>
+  <rss version="2.0" 
+    xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+      <title>${site.title}</title>
+      <description></description>
+      <link>${site.home_page_url}</link>
+      <atom:link href="${
+        site.home_page_url
+      }/feed.xml" rel="self" type="application/rss+xml" />
+      ${site.items.slice(0, 10).map(
+        (post) => /*xml*/ `
+        <item>
+            <title>${escapeXml(post.title)}</title>
+            <description>${escapeXml(
+              post.content_html.toString()
+            )}</description>
+            <pubDate>${new Date(post.date_published).toUTCString()}</pubDate>
+            <link>${post.url}</link>
+            <guid>${post.id}</guid>
+        </item>
+      `
+      )}
+    </channel>
+  </rss>
+  `;
+}
+
+function escapeXml(unsafe) {
+  return unsafe.replace(/[<>&'"]/g, function (c) {
+    switch (c) {
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case "&":
+        return "&amp;";
+      case "'":
+        return "&apos;";
+      case '"':
+        return "&quot;";
+    }
+  });
 }

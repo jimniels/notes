@@ -9,7 +9,8 @@
     "build": "npm run pre && node index.js"
   },
   "dependencies": {
-    "html": "github:jimniels/html"
+    "html": "github:jimniels/html",
+    "jsonfeed-to-rss": "^3.0.6"
   },
   "devDependencies": {
     "marked": "^4.2.12",
