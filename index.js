@@ -46,12 +46,6 @@ const themes = {
     "text-secondary": "#ff8fa3",
     highlight: "#ff4d6d",
   },
-  Platnak: {
-    bg: "#ffffff",
-    text: "#326273",
-    "text-secondary": "#5c9ead",
-    highlight: "#e39774",
-  },
   WWW: {
     bg: "#fff",
     text: "#000",
@@ -93,9 +87,10 @@ let jsonFeed = {
   feed_url: "https://notes.jim-nielsen.com/feed.json",
   items: [...localContent, ...remoteContent].map(([id, md]) => {
     try {
-      let dateISO = id.split("");
-      dateISO[id.lastIndexOf("-")] = ":";
-      dateISO = dateISO.join("") + "-0600"; // MDT -0600 from zulu
+      // 2022-01-05T1251
+      const [date, time] = id.split("T");
+      const dateISO =
+        date + "T" + time.slice(0, 2) + ":" + time.slice(2, 4) + "-0600"; // MDT -0600 from zulu
 
       const { title, external_url, content_html, tags } =
         convertMdToContentPieces(md);
@@ -111,7 +106,7 @@ let jsonFeed = {
         ...(tags.length ? { tags } : {}),
       };
     } catch (e) {
-      console.log("Failed on:", file);
+      console.log("Failed on:", id);
       console.log(e);
     }
   }),
@@ -140,7 +135,7 @@ fs.writeFileSync("./build/feed.xml", jsonfeedToRSS(jsonFeed));
 
 function template(data) {
   const activeThemeName = Object.keys(themes)[0];
-  return html`<html lang="en" data-theme="${activeThemeName}">
+  return html`<html lang="en" data-theme="${activeThemeName}" id="top">
     <head>
       <meta charset="UTF-8" />
       <title>Jim Nielsen’s Notes</title>
@@ -180,6 +175,7 @@ function template(data) {
           color: inherit;
           text-decoration: none;
           border-bottom: 1px solid;
+          transition: 0.1s ease color;
         }
         a:hover {
           color: var(--c-highlight);
@@ -220,7 +216,7 @@ function template(data) {
           border-bottom: 1px solid;
         }
         body > header {
-          margin: 4rem 0 5rem;
+          margin: 8rem 0 2rem;
           position: relative;
         }
         body > header h1 {
@@ -272,8 +268,8 @@ function template(data) {
           padding-left: calc(1.618rem / 2);
         }
         article {
-          margin-bottom: 8rem;
-          padding-top: 2.5rem;
+          margin-bottom: 5rem;
+          padding-top: 5rem; /* enough space when anchoring to a thing */
           overflow-wrap: break-word;
         }
 
@@ -287,69 +283,82 @@ function template(data) {
           color: var(--c-highlight);
         }
 
-        nav a {
-          border: none !important;
-          width: 2.5rem;
-          height: 2.5rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: var(--c-text-secondary);
-        }
-        nav a:hover {
-          background: var(--c-highlight);
-        }
-
-        nav svg {
-          fill: var(--c-bg);
-        }
-
         nav {
-          position: fixed;
-          bottom: 0;
-          right: 0;
+          position: sticky;
+          top: 0;
+          left: 1rem;
           display: flex;
-          flex-direction: column;
-          gap: 1px;
-          width: fit-content;
+          gap: 1rem;
+          z-index: 1;
+          background: var(--c-bg);
+          padding: 1rem 0 0.25rem;
+        }
+        nav:after {
+          content: "";
+          position: absolute;
+          width: 100%;
+          top: 100%;
+          height: 3rem;
+          background: linear-gradient(0deg, transparent, var(--c-bg));
+          pointer-events: none;
         }
 
         @media screen and (min-width: 600px) {
           body {
-            margin: 0 0 0 6rem;
+            margin: 0 0 0 2rem;
           }
           nav {
-            left: 0;
-            top: 4rem;
+            left: 2rem;
           }
+        }
+
+        nav a {
+          border: none !important;
+          width: 2.75rem;
+          height: 2.75rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          box-shadow: 0 0 0 0.5rem var(--c-bg);
+        }
+
+        [data-open-theme] nav > a:first-child svg,
+        nav a:hover svg {
+          fill: var(--c-highlight);
+        }
+
+        nav svg {
+          fill: var(--c-text-secondary);
+          transition: 0.3s ease fill;
         }
       </style>
     </head>
     <body>
+      <nav>
+        <a href="#js-theme" title="Change theme"
+          >${importSvg("./icon-theme.svg")}</a
+        >
+        <a
+          href="#${data.items[Math.floor(Math.random() * data.items.length)]
+            .id}"
+          title="Jump to random note"
+          class="js-shuffle"
+        >
+          ${importSvg("./icon-shuffle.svg")}
+        </a>
+        <a href="#top" title="Jump to top">${importSvg("./icon-jump.svg")}</a>
+        <a href="/feed.xml" title="RSS feed">${importSvg("./icon-rss.svg")}</a>
+        <a href="/feed.json" title="JSON feed"
+          >${importSvg("./icon-json.svg")}</a
+        >
+      </nav>
       <header>
         <h1>Jim Nielsen’s Notes</h1>
         <p>
           Stuff that strikes me as interesting. Fodder for
           <a href="https://blog.jim-nielsen.com">my blog</a>.
         </p>
-
-        <nav>
-          <a href="#js-theme">${importSvg("./icon-paint.svg")}</a>
-          <a
-            href="#${data.items[Math.floor(Math.random() * data.items.length)]
-              .id}"
-            title="Jump to random note"
-            class="js-shuffle"
-          >
-            ${importSvg("./icon-shuffle.svg")}
-          </a>
-          <a href="/feed.xml" title="RSS Feed"
-            >${importSvg("./icon-rss.svg")}</a
-          >
-          <a href="/feed.json" title="JSON Feed"
-            >${importSvg("./icon-json.svg")}</a
-          >
-        </nav>
       </header>
 
       ${Theme({ activeThemeName })}
@@ -404,7 +413,7 @@ function template(data) {
                         ${date_published.slice(0, 10)}
                       </time>
                     </li>
-                    ${tags.length ? tags.map((tag) => `<li>#${tag}</li>`) : ""}
+                    ${tags ? tags.map((tag) => `<li>#${tag}</li>`) : ""}
                   </ul>
                 </footer>
               </article>
@@ -490,16 +499,17 @@ function Theme({ activeThemeName }) {
       }
       form {
         display: flex;
+        z-index: 2;
         position: fixed;
         top: -4rem;
         font-size: 0.875rem;
-        left: 0;
+        left: 5rem;
         right: 0;
         /* border-bottom: 1px solid var(--c-text-secondary); */
         background: var(--c-bg);
-        /* padding: 10px 0; */
+        padding: 1rem 1rem 0.25rem;
         overflow: scroll;
-        width: 100%;
+
         gap: 1.5rem;
         transition: 0.3s ease top;
 
@@ -521,11 +531,13 @@ function Theme({ activeThemeName }) {
         display: flex;
         align-items: center;
         gap: 1rem;
-        padding: 1rem;
-        border-top: 3px solid transparent;
+        height: 2.5rem;
+        padding: 0 1rem;
+        border: 1px solid transparent;
         position: relative;
+        border-radius: 45px;
       }
-      form label:before {
+      /* form label:before {
         content: "";
         width: 0;
         height: 0;
@@ -536,10 +548,9 @@ function Theme({ activeThemeName }) {
         position: absolute;
         left: 50%;
         top: 0;
-      }
-      form label:has(> input:checked),
-      form label:has(> input:checked):before {
-        border-top-color: var(--c-highlight);
+      } */
+      form label:has(> input:checked) {
+        box-shadow: inset 0 0 0 1px var(--c-highlight);
       }
       form input {
         display: none;
@@ -602,14 +613,18 @@ function Theme({ activeThemeName }) {
         localStorage.setItem("theme", activeTheme);
       });
 
+      document.querySelector("#js-theme").addEventListener("click", (e) => {
+        e.stopPropagation();
+      });
+
       // Navigation theme
-      /*document.addEventListener("click", () => {
+      document.addEventListener("click", (e) => {
         console.log(document.documentElement.dataset.openTheme);
-        if (document.documentElement.dataset.openTheme) {
-          console.log("fired general click");
-          window.location.hash = "";
+        if (document.documentElement.dataset.openTheme === "true") {
+          document.documentElement.removeAttribute("data-open-theme");
         }
       });
+      /*
       document.querySelector("#js-theme").addEventListener("click", (e) => {
         e.stopPropagation();
       });*/
@@ -623,6 +638,7 @@ function Theme({ activeThemeName }) {
           } else {
             document.documentElement.setAttribute("data-open-theme", "true");
           }
+          e.stopPropagation();
         });
     </script>
   `;
