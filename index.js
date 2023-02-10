@@ -82,7 +82,7 @@ const remoteContent = remoteJsonFeed.items.map(({ id, content_text }) => [
 
 let jsonFeed = {
   version: "https://jsonfeed.org/version/1",
-  title: "Jim Nielsen’s Blog Reading Notes",
+  title: "Jim Nielsen’s Notes",
   home_page_url: "https://notes.jim-nielsen.com",
   feed_url: "https://notes.jim-nielsen.com/feed.json",
   items: [...localContent, ...remoteContent].map(([id, md]) => {
