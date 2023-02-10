@@ -216,7 +216,7 @@ function template(data) {
           border-bottom: 1px solid;
         }
         body > header {
-          margin: 8rem 0 2rem;
+          margin: 3rem 0 -1rem;
           position: relative;
         }
         body > header h1 {
