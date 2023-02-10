@@ -302,7 +302,7 @@ function template(data) {
           margin-left: -2rem;
           display: flex;
           gap: 1rem;
-          z-index: 1;
+          z-index: 10;
           background: var(--c-bg);
           padding: 1rem 0 0.25rem 2rem;
         }
@@ -328,13 +328,15 @@ function template(data) {
 
         nav a {
           border: none !important;
-          width: 2.75rem;
-          height: 2.75rem;
           display: flex;
           align-items: center;
           justify-content: center;
           border-radius: 50%;
-          box-shadow: 0 0 0 0.5rem var(--c-bg);
+          box-shadow: 0 0 0 10px var(--c-bg);
+          background: var(--c-bg);
+        }
+        nav a:first-child {
+          z-index: 100;
         }
 
         [data-open-theme] nav > a:first-child svg,
@@ -371,6 +373,7 @@ function template(data) {
         <a href="/feed.json" title="JSON feed" arial-label="JSON feed"
           >${importSvg("./icon-json.svg")}</a
         >
+        ${Theme({ activeThemeName })}
       </nav>
       <header>
         <h1>Notes</h1>
@@ -381,7 +384,6 @@ function template(data) {
         ${importSvg("./signature.svg")}
       </header>
 
-      ${Theme({ activeThemeName })}
       ${
         /*
     <select>
@@ -523,11 +525,11 @@ function Theme({ activeThemeName }) {
         position: fixed;
         top: -4rem;
         font-size: 0.875rem;
-        left: 5rem;
+        left: 3rem;
         right: 0;
         /* border-bottom: 1px solid var(--c-text-secondary); */
         background: var(--c-bg);
-        padding: 1rem 1rem 0.25rem;
+        padding: 1rem 1rem 0.25rem 3rem;
         overflow: scroll;
 
         gap: 1.5rem;
