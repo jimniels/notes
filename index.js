@@ -13,7 +13,7 @@ import jsonfeedToRSS from "jsonfeed-to-rss";
 const normalize = fs
   .readFileSync("./node_modules/normalize.css/normalize.css")
   .toString();
-const importSvg = (path) => fs.readFileSync(path).toString();
+const importSvg = (path, label) => fs.readFileSync(path).toString();
 
 const themes = {
   Yamble: {
@@ -216,11 +216,12 @@ function template(data) {
           border-bottom: 1px solid;
         }
         body > header {
-          margin: 3rem 0 -1rem;
+          margin: 4rem 0 -1rem;
           position: relative;
         }
         body > header h1 {
           line-height: 1;
+          text-indent: 11rem;
         }
         body > header h1:after {
           content: "";
@@ -234,9 +235,20 @@ function template(data) {
         }
         body > header > :is(h1, p) {
           margin: 0.5rem 0;
+          position: relative;
+          z-index: 1;
         }
         body > header p {
           color: var(--c-text-secondary);
+          padding-left: 3rem;
+          line-height: 1.3;
+        }
+        body > header svg {
+          position: absolute;
+          left: -20px;
+          top: -30px;
+          fill: var(--c-highlight);
+          z-index: 0;
         }
         @keyframes blink {
           from,
@@ -286,18 +298,20 @@ function template(data) {
         nav {
           position: sticky;
           top: 0;
-          left: 1rem;
+          left: 0;
+          margin-left: -2rem;
           display: flex;
           gap: 1rem;
           z-index: 1;
           background: var(--c-bg);
-          padding: 1rem 0 0.25rem;
+          padding: 1rem 0 0.25rem 2rem;
         }
         nav:after {
           content: "";
           position: absolute;
           width: 100%;
           top: 100%;
+          left: 0;
           height: 3rem;
           background: linear-gradient(0deg, transparent, var(--c-bg));
           pointer-events: none;
@@ -336,29 +350,35 @@ function template(data) {
     </head>
     <body>
       <nav>
-        <a href="#js-theme" title="Change theme"
+        <a href="#js-theme" title="Change theme" aria-label="Change theme"
           >${importSvg("./icon-theme.svg")}</a
         >
         <a
           href="#${data.items[Math.floor(Math.random() * data.items.length)]
             .id}"
           title="Jump to random note"
+          aria-label="Jump to random note"
           class="js-shuffle"
         >
           ${importSvg("./icon-shuffle.svg")}
         </a>
-        <a href="#top" title="Jump to top">${importSvg("./icon-jump.svg")}</a>
-        <a href="/feed.xml" title="RSS feed">${importSvg("./icon-rss.svg")}</a>
-        <a href="/feed.json" title="JSON feed"
+        <a href="#top" title="Jump to top" aria-label="Jump to top"
+          >${importSvg("./icon-jump.svg")}</a
+        >
+        <a href="/feed.xml" title="RSS feed" arial-label="RSS feed"
+          >${importSvg("./icon-rss.svg")}</a
+        >
+        <a href="/feed.json" title="JSON feed" arial-label="JSON feed"
           >${importSvg("./icon-json.svg")}</a
         >
       </nav>
       <header>
-        <h1>Jim Nielsen’s Notes</h1>
+        <h1>Notes</h1>
         <p>
-          Stuff that strikes me as interesting. Fodder for
+          Note-icing the words of others. Fodder for
           <a href="https://blog.jim-nielsen.com">my blog</a>.
         </p>
+        ${importSvg("./signature.svg")}
       </header>
 
       ${Theme({ activeThemeName })}
