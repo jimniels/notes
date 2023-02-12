@@ -1,6 +1,5 @@
 // TODO favicon
-// TODO rss xml feed (+ <meta>)
-// TODO <meta> feeds from jim-nielsen.com
+// TODO <link> feeds from jim-nielsen.com
 // TODO blog post
 
 import fs from "fs";
@@ -106,32 +105,38 @@ let jsonFeed = {
         ...(tags.length ? { tags } : {}),
       };
     } catch (e) {
-      console.log("Failed on:", id);
+      console.log(
+        "Failed to parse a note. This is likely a problem with malformed data on a file you recently made. Problem file:",
+        id
+      );
       console.log(e);
     }
   }),
 };
 
+// Create a version of our feed just for the feeds themselves, which have less
+// items, less content, and slightly different HTML with inline permalinks
+const jsonFeedWithPermalinks = {
+  ...jsonFeed,
+  items: jsonFeed.items.slice(0, 20).map((item) => {
+    return {
+      // Filter out any key/value pairs that start with "_" because that's
+      // proprietary to our web page only. Plus don't use `content_html` cause
+      // we'll grab that on our own
+      ...Object.keys(item)
+        .filter((key) => !(key === "content_html" || key.startsWith("_")))
+        .reduce((acc, key) => ({ ...acc, [key]: item[key] }), {}),
+      content_html: item.content_html + `<p><a href="${item.url}">🔗</a></p>`,
+    };
+  }),
+};
+
 fs.writeFileSync(
   "./build/feed.json",
-  JSON.stringify(
-    {
-      ...jsonFeed,
-      items: jsonFeed.items.slice(0, 20).map((item) => {
-        // Filter out any key/value pairs that start with "_" because that's proprietary to us here
-        const keys = Object.keys(item);
-        return keys
-          .filter((key) => !key.startsWith("_"))
-          .reduce((acc, key) => ({ ...acc, [key]: item[key] }), {});
-      }),
-    },
-    null,
-    2
-  )
+  JSON.stringify(jsonFeedWithPermalinks, null, 2)
 );
 fs.writeFileSync("./build/index.html", template(jsonFeed));
-// fs.writeFileSync("./build/feed.xml", XMLFeed(jsonFeed));
-fs.writeFileSync("./build/feed.xml", jsonfeedToRSS(jsonFeed));
+fs.writeFileSync("./build/feed.xml", jsonfeedToRSS(jsonFeedWithPermalinks));
 
 function template(data) {
   const activeThemeName = Object.keys(themes)[0];
@@ -198,28 +203,6 @@ function template(data) {
           overflow: scroll;
         }
 
-        article > header > p {
-          color: var(--c-text-secondary);
-          font-size: 0.8125rem;
-          text-transform: uppercase;
-          letter-spacing: 0.05rem;
-          margin-bottom: 0;
-        }
-        article > footer {
-          color: var(--c-text-secondary);
-          font-size: 0.8125rem;
-          margin-bottom: 0;
-        }
-        article > footer > ul {
-          display: flex;
-          list-style-type: none;
-          gap: 0.5rem;
-          padding: 0;
-        }
-        article > footer > ul li:not(:last-child):after {
-          content: " · ";
-          padding: 0 0.25rem;
-        }
         time a {
           border-bottom: none;
         }
@@ -270,6 +253,29 @@ function template(data) {
           50% {
             opacity: 0;
           }
+        }
+
+        article > header > p {
+          color: var(--c-text-secondary);
+          font-size: 0.8125rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05rem;
+          margin-bottom: 0;
+        }
+        article > footer {
+          color: var(--c-text-secondary);
+          font-size: 0.8125rem;
+          margin-bottom: 0;
+        }
+        article > footer > ul {
+          display: flex;
+          list-style-type: none;
+          gap: 0.5rem;
+          padding: 0;
+        }
+        article > footer > ul li:not(:last-child):after {
+          content: " · ";
+          padding: 0 0.25rem;
         }
 
         article header {
