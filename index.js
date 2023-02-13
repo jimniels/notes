@@ -203,15 +203,8 @@ function template(data) {
           overflow: scroll;
         }
 
-        time a {
-          border-bottom: none;
-        }
-        time a:hover {
-          opacity: 0.75;
-          border-bottom: 1px solid;
-        }
         body > header {
-          margin: 4rem 0 -1rem;
+          margin: 4rem 0 0;
           position: relative;
         }
         body > header h1 {
@@ -402,6 +395,7 @@ function template(data) {
         ${importSvg("./signature.svg")}
       </header>
 
+      <!-- ${Search(data)} -->
       ${
         /*
     <select>
@@ -438,7 +432,10 @@ function template(data) {
               _external_url_domain,
               tags,
             }) => html`
-              <article id="${id}">
+              <article
+                id="${id}"
+                ${tags ? html`data-tags="${tags.join(" ")}"` : ""}
+              >
                 <header>
                   <h1><a href="${external_url}">${title}</a></h1>
                   <p class="byline">
@@ -470,6 +467,7 @@ function template(data) {
       </footer>
 
       <script>
+        // Shuffle jump to link
         const min = 0;
         const max = ${data.items.length};
         document.querySelector(".js-shuffle").addEventListener("click", (e) => {
@@ -534,10 +532,10 @@ function convertMdToContentPieces(markdown) {
 function Theme({ activeThemeName }) {
   return html`
     <style>
-      [data-open-theme] form {
+      [data-open-theme] .theme {
         top: 0;
       }
-      form {
+      .theme {
         display: flex;
         z-index: 2;
         position: fixed;
@@ -545,7 +543,6 @@ function Theme({ activeThemeName }) {
         font-size: 0.875rem;
         left: 3rem;
         right: 0;
-        /* border-bottom: 1px solid var(--c-text-secondary); */
         background: var(--c-bg);
         padding: 1rem 1rem 0.25rem 3rem;
         overflow: scroll;
@@ -555,19 +552,10 @@ function Theme({ activeThemeName }) {
 
         scrollbar-width: none;
       }
-      form::-webkit-scrollbar {
+      .theme::-webkit-scrollbar {
         display: none;
       }
-      /* form:after {
-        content: "";
-        background: linear-gradient(90deg, var(--c-bg), transparent);
-        height: 1rem;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-      } */
-      form label {
+      .theme label {
         display: flex;
         align-items: center;
         gap: 1rem;
@@ -577,33 +565,19 @@ function Theme({ activeThemeName }) {
         position: relative;
         border-radius: 45px;
       }
-      /* form label:before {
-        content: "";
-        width: 0;
-        height: 0;
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-top: 6px solid transparent;
-
-        position: absolute;
-        left: 50%;
-        top: 0;
-      } */
-      form label:has(> input:checked) {
+      .theme label:has(> input:checked) {
         box-shadow: inset 0 0 0 1px var(--c-highlight);
       }
-      form input {
+      .theme input {
         display: none;
       }
-      form span {
-      }
-      form ul {
+      .theme ul {
         display: flex;
         list-style-type: none;
         margin: 0;
         padding: 0;
       }
-      form ul li {
+      .theme ul li {
         width: 18px;
         height: 18px;
         box-shadow: 0 0 0 2px white, 0 0 0 4px var(--c-bg),
@@ -611,7 +585,7 @@ function Theme({ activeThemeName }) {
         border-radius: 50%;
       }
     </style>
-    <form id="js-theme">
+    <form id="js-theme" class="theme">
       ${Object.entries(themes)
         .map(
           ([name, colors]) => html`<label>
@@ -681,5 +655,83 @@ function Theme({ activeThemeName }) {
           e.stopPropagation();
         });
     </script>
+  `;
+}
+
+function Search(data) {
+  return html`
+    <style>
+      .search {
+        margin: 5rem 0 -1rem;
+      }
+
+      .search input {
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: transparent;
+        border: 1px solid var(--c-text-secondary);
+        border-radius: 20px;
+        color: inherit;
+      }
+      .search input:hover,
+      .search input:focus {
+        border-color: var(--c-highlight);
+      }
+      .search input:focus {
+        box-shadow: 0 0 0 2px var(--c-bg), 0 0 0 4px var(--c-highlight);
+        outline: 0;
+      }
+    </style>
+    <form id="js-search" class="search">
+      <input type="text" placeholder="Search…" list="tags" />
+
+      <datalist id="tags">
+        ${data.items
+          .reduce((acc, item) => {
+            if (item.tags) {
+              item.tags.forEach((tag) => {
+                if (!acc.includes(tag)) acc.push(tag);
+              });
+            }
+            return acc;
+          }, [])
+          .sort()
+          .map((tag) => html`<option value="#${tag}"></option>`)}
+      </datalist>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", fn, false);
+        function fn() {
+          const $notes = Array.from(document.querySelectorAll("article"));
+          console.log("test", $notes);
+          document
+            .querySelector("#js-search input")
+            .addEventListener("input", (e) => {
+              const value = e.target.value;
+              if (
+                value.length === 0 ||
+                (value.startsWith("#") && value.length === 1)
+              ) {
+                $notes.forEach(($note) => {
+                  $note.removeAttribute("hidden");
+                });
+                return;
+              }
+              if (value.startsWith("#")) {
+                $notes.forEach(($note) => {
+                  if (
+                    $note.dataset.tags &&
+                    $note.dataset.tags.includes(e.target.value.slice(1))
+                  ) {
+                    $note.removeAttribute("hidden");
+                  } else {
+                    $note.setAttribute("hidden", "hidden");
+                  }
+                });
+              }
+            });
+        }
+      </script>
+    </form>
   `;
 }
