@@ -143,7 +143,7 @@ function template(data) {
       <meta charset="UTF-8" />
       <title>Jim Nielsen’s Notes</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <link rel="shortcut icon" href="favicon.png" />
+      <link rel="icon" href="/favicon.ico" />
       <link
         rel="alternate"
         type="application/rss+xml"
