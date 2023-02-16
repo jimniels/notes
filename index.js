@@ -1,6 +1,4 @@
-// TODO favicon
-// TODO <link> feeds from jim-nielsen.com
-// TODO blog post
+// TODO Move stuff to ./src
 
 import fs from "fs";
 import html from "html";
