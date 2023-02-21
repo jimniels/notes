@@ -156,6 +156,10 @@ function template(data) {
         title="JSON Feed"
         href="/feed.json"
       />
+      <link rel="me" href="https://github.com/jimniels" />
+      <link rel="me" href="https://twitter.com/jimniels" />
+      <link rel="me" href="https://mastodon.social/@jimniels" />
+      <link rel="me" href="https://dribbble.com@jimniels" />
 
       <style>
         ${normalize}
