@@ -1,5 +1,3 @@
-// TODO Move stuff to ./src
-
 import fs from "fs";
 import html from "html";
 import { marked } from "marked";
@@ -10,7 +8,7 @@ import jsonfeedToRSS from "jsonfeed-to-rss";
 const normalize = fs
   .readFileSync("./node_modules/normalize.css/normalize.css")
   .toString();
-const importSvg = (path, label) => fs.readFileSync(path).toString();
+const importSvg = (file, label) => fs.readFileSync("./src/" + file).toString();
 
 const themes = {
   Yamble: {
@@ -366,7 +364,7 @@ function template(data) {
     <body>
       <nav>
         <a href="#js-theme" title="Change theme" aria-label="Change theme"
-          >${importSvg("./icon-theme.svg")}</a
+          >${importSvg("icon-theme.svg")}</a
         >
         <a
           href="#${data.items[Math.floor(Math.random() * data.items.length)]
@@ -375,16 +373,16 @@ function template(data) {
           aria-label="Jump to random note"
           class="js-shuffle"
         >
-          ${importSvg("./icon-shuffle.svg")}
+          ${importSvg("icon-shuffle.svg")}
         </a>
         <a href="#top" title="Jump to top" aria-label="Jump to top"
-          >${importSvg("./icon-jump.svg")}</a
+          >${importSvg("icon-jump.svg")}</a
         >
         <a href="/feed.xml" title="RSS feed" arial-label="RSS feed"
-          >${importSvg("./icon-rss.svg")}</a
+          >${importSvg("icon-rss.svg")}</a
         >
         <a href="/feed.json" title="JSON feed" arial-label="JSON feed"
-          >${importSvg("./icon-json.svg")}</a
+          >${importSvg("icon-json.svg")}</a
         >
         ${Theme({ activeThemeName })}
       </nav>
@@ -394,7 +392,7 @@ function template(data) {
           Note-icing the words of others. Fodder for
           <a href="https://blog.jim-nielsen.com">my blog</a>.
         </p>
-        ${importSvg("./signature.svg")}
+        ${importSvg("signature.svg")}
       </header>
 
       <!-- ${Search(data)} -->

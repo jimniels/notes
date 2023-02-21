@@ -4,7 +4,7 @@
   "scripts": {
     "fetch-data": "curl https://blog.jim-nielsen.com/feed.reading-notes.json --output ./feed.json",
     "clean": "rm -rf ./build && mkdir ./build",
-    "pre": "npm run clean && npm run fetch-data && cp favicon.ico ./build/favicon.ico",
+    "pre": "npm run clean && npm run fetch-data && cp -a static/. build/",
     "start": "npm run pre && node --watch --no-warnings index.js",
     "build": "npm run pre && node index.js"
   },
