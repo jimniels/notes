@@ -446,9 +446,11 @@ function template(data) {
                 <footer class="de-emphasized">
                   <ul>
                     <li>
-                      <time datetime="${date_published}">
-                        ${date_published.slice(0, 10)}
-                      </time>
+                      <a href="#${id}"
+                        ><time datetime="${date_published}"
+                          >${date_published.slice(0, 10)}</time
+                        ></a
+                      >
                     </li>
                     ${tags ? tags.map((tag) => `<li>#${tag}</li>`) : ""}
                   </ul>
