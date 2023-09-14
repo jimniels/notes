@@ -1,4 +1,4 @@
-# [links.jim-nielsen.com](https://links.jim-nielsen.com)
+# [notes.jim-nielsen.com](https://notes.jim-nielsen.com)
 
 - Build: `npm run build`
 - Development: `npm start`
