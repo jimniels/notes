@@ -345,6 +345,10 @@ function template(data) {
           border-radius: 50%;
           box-shadow: 0 0 0 10px var(--c-bg);
           background: var(--c-bg);
+          transition: .3s ease transform;
+        }
+        nav a:active {
+          transform: scale(0.9);
         }
         nav a:first-child {
           z-index: 100;
