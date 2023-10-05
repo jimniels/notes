@@ -3,23 +3,23 @@
 - Build: `npm run build`
 - Development: `npm start`
 
-## Content format
+## How it works
 
-All content follows this pattern (tags optional but prefixed with `_` to differentiate them in iA Writer from [my blog’s](https://blog.jim-nielsen.com) posts). **No exceptions.**
+Each "post" is a markdown file.
+
+Each markdown file follows this pattern (tags optional but prefixed with `_` to differentiate them in iA Writer from [my blog’s](https://blog.jim-nielsen.com) posts). **No exceptions.**
 
 ```md
 #_article #_twitter #_rss
 
-# [Five years of quitting Twitter](https://nolanlawson.com/2022/02/02/five-years-of-quitting-twitter/)
+# [Name of the article I link to](https://example.com/path/to/article)
 
-I liked this:
+I liked this excerpt:
 
-> [for many] I only exist when someone takes pity on me and links to my blog from Twitter, Reddit, Hacker News, or a big site like CSS Tricks...
->
-> For those people who are re-sharing my content on social media, I suspect most of them found it from their RSS feed. So RSS definitely still seems alive and well, even if it’s just a small upstream tributary for the roaring downstream river of Twitter, Reddit, etc
+> Lorem ipsum santa dolor
 ```
 
-Markdown file gets parsed into a JSON feed item:
+Each markdown file gets parsed into a JSON feed item:
 
 ```js
 [
@@ -38,7 +38,9 @@ Markdown file gets parsed into a JSON feed item:
 ]
 ```
 
-## File names
+And the `index.js` uses template literals to creates an `index.html` file (along with an XML and JSON feed).
+
+## Markdown file names
 
 Files follow this format: `YYYY-MM-DDTHHMM.md`
 
