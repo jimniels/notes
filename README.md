@@ -8,7 +8,7 @@
 All content follows this pattern (tags optional but prefixed with `_` to differentiate them in iA Writer from [my blog’s](https://blog.jim-nielsen.com) posts). **No exceptions.**
 
 ```md
-#\_article #\_twitter #\_rss
+#_article #_twitter #_rss
 
 # [Five years of quitting Twitter](https://nolanlawson.com/2022/02/02/five-years-of-quitting-twitter/)
 
