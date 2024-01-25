@@ -128,6 +128,18 @@ const jsonFeedWithPermalinks = {
 };
 
 fs.writeFileSync(
+  "./build/notes.json",
+  JSON.stringify(
+    [...localContent, ...remoteContent].reduce(
+      (acc, [id, md]) => ({ [id]: md, ...acc }),
+      {}
+    ),
+
+    null,
+    2
+  )
+);
+fs.writeFileSync(
   "./build/feed.json",
   JSON.stringify(jsonFeedWithPermalinks, null, 2)
 );
@@ -345,7 +357,7 @@ function template(data) {
           border-radius: 50%;
           box-shadow: 0 0 0 10px var(--c-bg);
           background: var(--c-bg);
-          transition: .3s ease transform;
+          transition: 0.3s ease transform;
         }
         nav a:active {
           transform: scale(0.9);
