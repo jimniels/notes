@@ -153,6 +153,10 @@ function template(data) {
       <meta charset="UTF-8" />
       <title>Jim Nielsen’s Notes</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <script
+        type="module"
+        src="https://www.jim-nielsen.com/jim-navbar.js"
+      ></script>
       <link rel="icon" href="/favicon.ico" />
       <link
         rel="alternate"
@@ -378,6 +382,7 @@ function template(data) {
       </style>
     </head>
     <body>
+      <jim-navbar></jim-navbar>
       <nav>
         <a href="#js-theme" title="Change theme" aria-label="Change theme"
           >${importSvg("icon-theme.svg")}</a
