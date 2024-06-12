@@ -62,7 +62,7 @@ const themes = {
 };
 
 const localContent = fs
-  .readdirSync("./notes")
+  .readdirSync("./notez")
   .filter((file) => file.endsWith(".md"))
   .reverse()
   .map((file) => {

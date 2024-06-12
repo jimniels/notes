@@ -65,30 +65,59 @@ const { DBX_APP_KEY, DBX_APP_SECRET, DBX_REFRESH_TOKEN } = process.env;
  * @returns {Promise<{ [fileName: string]: string } | undefined>}
  */
 export async function getFiles(path) {
+  console.log("Getting files from Dropbox...");
+
   try {
     // Get and set the access token
+    console.time("Get access token");
     ACCESS_TOKEN = await getAccessToken();
+    console.timeEnd("Get access token");
 
     // Get all the files in the folder
+    console.time("Get list of files");
     const files = await listFilesInFolder(path);
+    console.timeEnd("Get list of files");
 
     // TODO: filter by .md files?
 
     // Get the contents of each file
+    console.time("Download files");
     let filesByName = {};
-    for (const file of files) {
-      if (file[".tag"] === "file") {
-        const content = await getFileContent(file.path_display);
-        filesByName[file.name] = content;
-        // console.log(`Content of ${file.name}:`, content);
-      }
-    }
+    let num = 0;
+    await Promise.all(
+      files.map(async (file) => {
+        if (file[".tag"] === "file") {
+          const content = await getFileContent(file.path_display);
+          filesByName[file.name] = content;
+          num++;
+          printProgress(`    ${num} / ${files.length} files downloaded...`);
+          // console.log(`Content of ${file.name}:`, content);
+        }
+      })
+    );
+    // for (const file of files) {
+    //   if (file[".tag"] === "file") {
+    //     const content = await getFileContent(file.path_display);
+    //     filesByName[file.name] = content;
+    //     num++;
+    //     printProgress(`${num} / ${files.length} files downloaded...`);
+    //     // console.log(`Content of ${file.name}:`, content);
+    //   }
+    // }
+    console.log();
+    console.timeEnd("Download files");
 
     return filesByName;
   } catch (error) {
     console.error(error);
     return undefined;
   }
+}
+
+function printProgress(progress) {
+  process.stdout.clearLine(0);
+  process.stdout.cursorTo(0);
+  process.stdout.write(progress);
 }
 
 /**
