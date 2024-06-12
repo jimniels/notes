@@ -8,7 +8,7 @@
     "clean": "rm -rf ./build && mkdir ./build && cp -a static/. build/",
     "prestart": "npm run clean && npm run fetch-notes-blog && npm run fetch-notes-dbx-dev",
     "start": "node --watch --no-warnings index.js",
-    "prebuild": "npm run clean && npm run fetch-notes-blog && npm run fetch-ontes-dbx-ci",
+    "prebuild": "npm run clean && npm run fetch-notes-blog && npm run fetch-notes-dbx-ci",
     "build": "npm run pre && node index.js",
     "postbuild": "html-minifier --collapse-whitespace --remove-empty-attributes --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-attribute-quotes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true build/index.html -o build/index.html"
   },
