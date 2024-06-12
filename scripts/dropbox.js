@@ -115,9 +115,10 @@ export async function getFiles(path) {
 }
 
 function printProgress(progress) {
-  process.stdout.clearLine(0);
-  process.stdout.cursorTo(0);
-  process.stdout.write(progress);
+  console.log(progress);
+  // process.stdout.clearLine(0);
+  // process.stdout.cursorTo(0);
+  // process.stdout.write(progress);
 }
 
 /**
