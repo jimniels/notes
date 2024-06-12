@@ -67,7 +67,7 @@ const localContent = fs
   .reverse()
   .map((file) => {
     const id = file.split(".")[0];
-    const md = fs.readFileSync(`./notes/${file}`).toString();
+    const md = fs.readFileSync(`./notez/${file}`).toString();
     return [id, md];
   });
 const remoteContent = remoteJsonFeed.items.map(({ id, content_text }) => [
