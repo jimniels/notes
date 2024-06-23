@@ -54,6 +54,9 @@ queries the API when necessary in local development. Then, in the build script,
 it will always query the API afresh.
 */
 
+import pLimit from "p-limit";
+const limit = pLimit(10);
+
 // To run this script from the CLI:
 // node --env-file=.env -e 'import("./scripts/dropbox.js").then(module => module.getFiles("/notes")).then(console.log)'
 let ACCESS_TOKEN = "";
@@ -85,15 +88,17 @@ export async function getFiles(path) {
     let filesByName = {};
     let num = 0;
     await Promise.all(
-      files.map(async (file) => {
-        if (file[".tag"] === "file") {
-          const content = await getFileContent(file.path_display);
-          filesByName[file.name] = content;
-          num++;
-          printProgress(`    ${num} / ${files.length} files downloaded...`);
-          // console.log(`Content of ${file.name}:`, content);
-        }
-      })
+      files.map(async (file) =>
+        limit(async () => {
+          if (file[".tag"] === "file") {
+            const content = await getFileContent(file.path_display);
+            filesByName[file.name] = content;
+            num++;
+            printProgress(`    ${num} / ${files.length} files downloaded...`);
+            // console.log(`Content of ${file.name}:`, content);
+          }
+        })
+      )
     );
     // for (const file of files) {
     //   if (file[".tag"] === "file") {
