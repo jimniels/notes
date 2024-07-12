@@ -6,3 +6,6 @@ build/
 buildOri/
 .env
 notez/
+origami/cache
+origami/old
+origami/creds.json

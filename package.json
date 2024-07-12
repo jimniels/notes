@@ -19,7 +19,8 @@
     "jsonfeed-to-rss": "^3.0.6"
   },
   "devDependencies": {
-    "@weborigami/origami": "^0.0.59",
+    "@weborigami/origami": "0.0.60",
+    "@weborigami/dropbox": "0.0.3",
     "marked": "^4.2.12",
     "normalize.css": "^8.0.1",
     "p-limit": "^5.0.0",
