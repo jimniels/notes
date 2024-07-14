@@ -1,0 +1,4 @@
+@cache(
+  (@package:@weborigami/dropbox @jsonParse(dropboxCreds.js()))/notes
+  @files/cache
+)

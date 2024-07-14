@@ -1,2 +1,0 @@
-// @values(@map(notes, mdToData.js))
-@values(@reverse(@map(dropbox.ori, mdToData.js)))

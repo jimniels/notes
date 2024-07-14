@@ -1,4 +1,0 @@
-@cache(
-  (@package:@weborigami/dropbox creds.json)/notes
-  @files/cache
-)

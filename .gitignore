@@ -3,9 +3,6 @@ node_modules/
 index.html
 feed.json
 build/
-buildOri/
 .env
 notez/
-origami/cache
-origami/old
-origami/creds.json
+cache/

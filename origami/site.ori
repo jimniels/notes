@@ -1,6 +1,0 @@
-((postData) => {
-  index.html = index.js(postData)
-  favicon.ico
-  feed.json = @json(feed.ori(postData))
-  feed.xml = @rss(feed.ori(postData))
-})(postData.ori/)

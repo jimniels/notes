@@ -1,4 +1,0 @@
-@map((https://blog.jim-nielsen.com/feed.reading-notes.json)/items, {
-  key: (value) => `${ value/id }.md`
-  value: (value) => value/content_text
-})
