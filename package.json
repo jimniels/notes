@@ -2,23 +2,19 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "fetch-notes-dbx-ci": "node scripts/dropbox-download-files.js",
-    "fetch-notes-blog": "curl https://blog.jim-nielsen.com/feed.reading-notes.json --output ./feed.json",
     "start": "ori @serve @watch src, =@debug src/site.ori",
     "build": "ori @copy src/site.ori, @clean @files/build",
     "postbuild": "html-minifier --collapse-whitespace --remove-empty-attributes --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-attribute-quotes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true build/index.html -o build/index.html"
   },
   "dependencies": {
     "html": "github:jimniels/html",
-    "html-minifier": "^4.0.0",
-    "jsonfeed-to-rss": "^3.0.6"
+    "html-minifier": "^4.0.0"
   },
   "devDependencies": {
     "@weborigami/dropbox": "0.0.3",
     "@weborigami/origami": "0.0.60",
     "dotenv": "^16.4.5",
     "marked": "^4.2.12",
-    "normalize.css": "^8.0.1",
     "p-limit": "^5.0.0",
     "psl": "^1.9.0"
   }
