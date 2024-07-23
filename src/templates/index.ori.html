@@ -1,0 +1,111 @@
+<!-- 
+@typedef {{
+  id: string,
+  content_html: string,
+  content_text: string,
+  date_published: string,
+  title: string,
+  url: string,
+  external_url: string,
+  _external_url_domain: string,
+  tags: Array<string>
+}} Note
+
+
+@typedef {{
+  bg: string,
+  text: string,
+  "text-secondary": string,
+  highlight: string
+}} Theme
+
+
+@property {{
+  theme: { [themeName: string ]: Theme }.
+  notes: Note[]
+}} _ - data passed to the template
+-->
+<!DOCTYPE html>
+<html lang="en" data-theme="${@keys(_/theme)/0}" id="top">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Jim Nielsen’s Notes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script
+      type="module"
+      src="https://www.jim-nielsen.com/jim-navbar.js"
+    ></script>
+    <link rel="icon" href="/favicon.ico" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="RSS Feed"
+      href="/feed.xml"
+    />
+    <link
+      rel="alternate"
+      type="application/json"
+      title="JSON Feed"
+      href="/feed.json"
+    />
+    <link rel="me" href="https://github.com/jimniels" />
+    <link rel="me" href="https://twitter.com/jimniels" />
+    <link rel="me" href="https://mastodon.social/@jimniels" />
+    <link rel="me" href="https://dribbble.com@jimniels" />
+
+    <!-- prettier-ignore -->
+    <style>${/*@inline(index.css)*/""}</style>
+  </head>
+  <body>
+    <jim-navbar></jim-navbar>
+    <nav>
+      <a href="#js-theme" title="Change theme" aria-label="Change theme"
+        >${../svgs/icon-theme.svg}</a
+      >
+      <a
+        href="#TODO: {items[Math.floor(Math.random() * items.length)].id}"
+        title="Jump to random note"
+        aria-label="Jump to random note"
+        class="js-shuffle"
+      >
+        ${../svgs/icon-shuffle.svg}
+      </a>
+      <a href="#top" title="Jump to top" aria-label="Jump to top"
+        >${../svgs/icon-jump.svg}</a
+      >
+      <a href="/feed.xml" title="RSS feed" arial-label="RSS feed"
+        >${../svgs/icon-rss.svg}</a
+      >
+      <a href="/feed.json" title="JSON feed" arial-label="JSON feed"
+        >${../svgs/icon-json.svg}</a
+      >
+      TODO: Theme({ activeThemeName })
+    </nav>
+    <header>
+      <h1>Notes</h1>
+      <p>
+        Note-icing the words of others. Fodder for
+        <a href="https://blog.jim-nielsen.com">my blog</a>.
+      </p>
+      ${../svgs/signature.svg}
+    </header>
+    <main></main>
+    <footer>
+      Holy cow, you made it all the way to the bottom? Look at you 👏
+      <br />
+      <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        >Here’s a special gift.</a
+      >
+    </footer>
+    <script>
+      // Shuffle jump to link
+      const min = 0;
+      const max = ${@values(_/notes)/length};
+      document.querySelector(".js-shuffle").addEventListener("click", (e) => {
+        e.preventDefault();
+        const rand = Math.floor(Math.random() * max) + min;
+        Array.from(document.querySelectorAll("article"))[rand].scrollIntoView();
+      });
+    </script>
+  </body>
+</html>

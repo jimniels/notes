@@ -5,11 +5,12 @@ import { fileURLToPath } from "node:url";
 
 const srcPath = path.dirname(fileURLToPath(import.meta.url));
 
-const normalize = fs
-  .readFileSync(
-    path.resolve(srcPath, "../node_modules/normalize.css/normalize.css")
-  )
-  .toString();
+const normalize = "";
+// fs
+//   .readFileSync(
+//     path.resolve(srcPath, "../node_modules/normalize.css/normalize.css")
+//   )
+//   .toString();
 
 const importSvg = (file, label) =>
   fs.readFileSync(path.resolve(srcPath, "svgs", file)).toString();
