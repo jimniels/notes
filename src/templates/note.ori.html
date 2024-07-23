@@ -1,10 +1,7 @@
 <!-- 
   @property {Note} _ - data passed to the template
 -->
-<article
-  id="${_/id}"
-  ${@if(_/tags, `data-tags="${@map(_/tags, (tag) => `${tag} `)}"`)}
->
+<article id="${_/id}" data-tags="${_/tags}">
   <header>
     <h1><a href="${_/external_url}">${_/title}</a></h1>
     <p class="byline">
@@ -17,13 +14,14 @@
       <li>
         <a href="#${_/id}"
           ><time datetime="${_/date_published}"
-            ><!-- @TODO need date here -->{_/date_published/slice(0,10)}</time
+            >${new:@js/String(_/date_published)/slice(0, 10)}</time
           ></a
         >
       </li>
+
       ${@if(_/tags, @map(_/tags, (tag) => `
-      <li>#${tag}</li>
-      `))}
+      <li>${tag}</li>
+      `), 'no tags')}
     </ul>
   </footer>
 </article>
