@@ -1,3 +1,6 @@
+<!-- 
+  @property {Note} _ - data passed to the template
+-->
 <article
   id="${_/id}"
   ${@if(_/tags, `data-tags="${@map(_/tags, (tag) => `${tag} `)}"`)}

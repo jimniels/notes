@@ -7,5 +7,16 @@ export type Note = {
   url: string;
   external_url: string;
   _external_url_domain: string;
-  tags: Array<string>;
+  tags?: Array<string>;
+};
+
+type ThemesById = {
+  [themeName: string]: Theme;
+};
+
+export type Theme = {
+  bg: string;
+  text: string;
+  "text-secondary": string;
+  highlight: string;
 };

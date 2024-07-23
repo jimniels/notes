@@ -1,32 +1,10 @@
 <!-- 
-@typedef {{
-  id: string,
-  content_html: string,
-  content_text: string,
-  date_published: string,
-  title: string,
-  url: string,
-  external_url: string,
-  _external_url_domain: string,
-  tags: Array<string>
-}} Note
-
-
-@typedef {{
-  bg: string,
-  text: string,
-  "text-secondary": string,
-  highlight: string
-}} Theme
-
-
-@property {{
-  theme: { [themeName: string ]: Theme }.
-  notes: Note[]
-}} _ - data passed to the template
+  @property {Object} _ - data passed to the template
+  @property {ThemesById} _.themesById
+  @property {Note[]} _.notes
 -->
 <!DOCTYPE html>
-<html lang="en" data-theme="${@keys(_/theme)/0}" id="top">
+<html lang="en" data-theme="${@keys(_/themesById)/0}" id="top">
   <head>
     <meta charset="UTF-8" />
     <title>Jim Nielsen’s Notes</title>
