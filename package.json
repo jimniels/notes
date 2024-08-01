@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "html": "github:jimniels/html",
-    "html-minifier": "^4.0.0"
+    "html-minifier": "^4.0.0",
+    "normalize.css": "^8.0.1"
   },
   "devDependencies": {
     "@weborigami/dropbox": "0.0.3",
