@@ -5,10 +5,18 @@ import psl from "psl";
 
 export default function mdToData(fileBuffer, fileName) {
   const markdown = toString(fileBuffer);
+
+  let data;
+  try {
+    data = convertMdToContentPieces(markdown, fileName);
+  } catch (e) {
+    console.error(`Error parsing content for file: ${fileName}`, e);
+  }
+
   return {
     id: path.basename(fileName, ".md"),
     date_published: extractDate(fileName),
-    ...convertMdToContentPieces(markdown),
+    ...data,
   };
 }
 
