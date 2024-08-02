@@ -9,14 +9,15 @@
   "dependencies": {
     "html": "github:jimniels/html",
     "html-minifier": "^4.0.0",
-    "normalize.css": "^8.0.1"
-  },
-  "devDependencies": {
+    "normalize.css": "^8.0.1",
     "@weborigami/dropbox": "0.0.3",
     "@weborigami/origami": "0.0.62",
     "dotenv": "^16.4.5",
     "marked": "^4.2.12",
     "p-limit": "^5.0.0",
     "psl": "^1.9.0"
+  },
+  "devDependencies": {
+    
   }
 }
