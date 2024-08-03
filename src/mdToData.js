@@ -3,6 +3,11 @@ import { marked } from "marked";
 import path from "node:path";
 import psl from "psl";
 
+/**
+ * @param {Buffer} fileBuffer
+ * @param {string} fileName
+ * @returns {import("../types").Note}
+ */
 export default function mdToData(fileBuffer, fileName) {
   const markdown = toString(fileBuffer);
 
