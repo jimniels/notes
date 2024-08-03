@@ -66,15 +66,13 @@ function convertMdToContentPieces(markdown) {
   // Convert markdown to HTML & get links data
   const markdownSansTagsAndTitle = markdownByLine.join("\n");
 
-  return Object.assign(
-    {
-      content_html: marked.parse(markdownSansTagsAndTitle),
-      title,
-      external_url,
-      _external_url_domain,
-    },
-    tags.length > 0 && { tags }
-  );
+  return {
+    title,
+    external_url,
+    _external_url_domain,
+    ...(tags.length > 0 ? { tags } : {}),
+    content_html: marked.parse(markdownSansTagsAndTitle),
+  };
 }
 
 function extractDate(id) {
