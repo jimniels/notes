@@ -6,4 +6,5 @@ getFiles("/notes").then((files) => {
   Object.entries(files).forEach(([key, contents]) => {
     fs.writeFileSync(`./notez/${key}`, contents);
   });
+  console.log("Files downloaded!");
 });

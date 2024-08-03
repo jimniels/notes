@@ -1,0 +1,50 @@
+{
+  "Yamble": {
+    "bg": "#00171f",
+    "text": "#ffffff",
+    "text-secondary": "#007ea7",
+    "highlight": "#00a8e8"
+  },
+  "Halloween": {
+    "bg": "#252422",
+    "text": "#fffcf2",
+    "text-secondary": "#ccc5b9",
+    "highlight": "#eb5e28"
+  },
+  "Cadete": {
+    "bg": "#2b2d42",
+    "text": "#edf2f4",
+    "text-secondary": "#8d99ae",
+    "highlight": "#ef233c"
+  },
+  "Zizzoo": {
+    "bg": "#000000",
+    "text": "#ffffff",
+    "text-secondary": "#999",
+    "highlight": "#fca311"
+  },
+  "Valentines": {
+    "bg": "#590d22",
+    "text": "#fff0f3",
+    "text-secondary": "#ff8fa3",
+    "highlight": "#ff4d6d"
+  },
+  "WWW": {
+    "bg": "#fff",
+    "text": "#000",
+    "text-secondary": "#999",
+    "highlight": "#0000EE"
+  },
+  "Woods": {
+    "bg": "#fefae0",
+    "text": "#283618",
+    "text-secondary": "#606c38",
+    "highlight": "#bc6c25"
+  },
+  "Jazz": {
+    "bg": "#03071e",
+    "text": "#fff9e8",
+    "text-secondary": "#f48c06",
+    "highlight": "#dc2f02"
+  }
+}
