@@ -11,5 +11,6 @@
     external_url: item/external_url
     tags: item/tags
     content_html: `${ item/content_html }<p><a href="https://notes.jim-nielsen.com/#${ item/id }">🔗</a></p>`
+    _external_url_domain: item/_external_url_domain
   })
 }
