@@ -50,7 +50,7 @@ Each markdown file gets parsed into a JSON feed item:
 ]
 ```
 
-And the `index.js` uses template literals to creates an `index.html` file (along with an XML and JSON feed).
+And then templates produce the `index.html` file (along with an XML and JSON feed).
 
 ## URLs
 
