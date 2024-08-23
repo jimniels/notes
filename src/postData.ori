@@ -3,14 +3,5 @@
   title: "Jim Nielsen’s Notes"
   home_page_url: "https://notes.jim-nielsen.com"
   feed_url: "https://notes.jim-nielsen.com/feed.json"
-  items: @values(@map(@merge(postDataFromDropbox.ori, postDataFromBlog.ori), (item) => {
-    id: item/id
-    date_published: item/date_published
-    title: item/title
-    url: `https://notes.jim-nielsen.com/#${ item/id }`
-    external_url: item/external_url
-    tags: item/tags
-    content_html: item/content_html //`${ item/content_html }<p><a href="https://notes.jim-nielsen.com/#${ item/id }">🔗</a></p>`
-    _external_url_domain: item/_external_url_domain
-  }))
+  items: @values(@merge(postDataFromDropbox.ori, postDataFromBlog.ori))
 }
