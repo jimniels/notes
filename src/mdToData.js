@@ -1,7 +1,8 @@
+// @ts-check
 import { toString } from "@weborigami/async-tree";
 import { marked } from "marked";
 import path from "node:path";
-import psl from "psl";
+import { parse } from "tldts";
 
 /**
  * @param {Buffer} fileBuffer
@@ -10,26 +11,13 @@ import psl from "psl";
  */
 export default function mdToData(fileBuffer, fileName) {
   const markdown = toString(fileBuffer);
+  const id = path.basename(fileName, ".md");
+  const date_published = extractDate(id);
+  const url = `https://notes.jim-nielsen.com/#${id}`;
 
-  let data;
-  try {
-    data = convertMdToContentPieces(markdown, fileName);
-  } catch (e) {
-    console.error(`Error parsing content for file: ${fileName}`, e);
-  }
-
-  return {
-    id: path.basename(fileName, ".md"),
-    date_published: extractDate(fileName),
-    ...data,
-  };
-}
-
-function convertMdToContentPieces(markdown) {
   let title = "";
-  let external_url = "";
-  let html = "";
   let tags = [];
+  let external_url = "";
 
   // Extract `title` and `tags` from the markdown document
   // Then convert everything else to HTML
@@ -52,6 +40,11 @@ function convertMdToContentPieces(markdown) {
     // If it's the <h1>, extract it
     else if (line.startsWith("# ")) {
       const matches = line.match(/# \[(.+?)\]\((.+?)\)/);
+      if (matches === null) {
+        throw new Error(
+          `<h1> could not be extracted from markdown file: ${id}`
+        );
+      }
       title = matches[1];
       external_url = matches[2];
 
@@ -61,20 +54,35 @@ function convertMdToContentPieces(markdown) {
     }
   }
 
-  const _external_url_domain = psl.get(new URL(external_url).hostname);
+  const { domain: _external_url_domain } = parse(external_url);
+  if (!_external_url_domain) {
+    throw new Error(
+      `External URL domain could not be extracted from markdown file: ${id}`
+    );
+  }
 
   // Convert markdown to HTML & get links data
   const markdownSansTagsAndTitle = markdownByLine.join("\n");
+  const content_html = marked.parse(markdownSansTagsAndTitle) || "";
 
-  return {
+  /** @type {import("../types").Note} */
+  const note = {
+    content_html,
+    date_published,
+    id,
+    url,
+    tags,
     title,
     external_url,
     _external_url_domain,
-    ...(tags.length > 0 ? { tags } : {}),
-    content_html: marked.parse(markdownSansTagsAndTitle),
   };
+  return note;
 }
 
+/**
+ * @param {string} id - Should be in the format of `2021-08-01T1200`
+ * @returns {string} - ISO 8601 date string
+ */
 function extractDate(id) {
   const [date, time] = id.split("T");
   const dateISO =

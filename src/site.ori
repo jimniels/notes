@@ -1,6 +1,10 @@
-((postData) => {
-  index.html = index.dev.js(postData)
-  favicon.ico
-  feed.json = @json(feed.ori(postData))
-  feed.xml = @rss(feed.ori(postData))
-})(@values(@merge(postDataFromDropbox.ori, postDataFromBlog.ori)))
+{
+  _postData = postData.ori/
+  _truncatedPostData = { ..._postData, items: @take(_postData/items, 20) }
+  public = {
+    index.html = index.dev.js(_postData/items)
+    favicon.ico
+    feed.json = @json(_truncatedPostData)
+    feed.xml = @rss(_truncatedPostData)
+  }
+}/public
