@@ -16,7 +16,7 @@ export default function mdToData(fileBuffer, fileName) {
   const url = `https://notes.jim-nielsen.com/#${id}`;
 
   let title = "";
-  let tags = [];
+  let tags = undefined;
   let external_url = "";
 
   // Extract `title` and `tags` from the markdown document
