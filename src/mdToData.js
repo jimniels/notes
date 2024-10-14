@@ -54,10 +54,16 @@ export default function mdToData(fileBuffer, fileName) {
     }
   }
 
-  const { domain: _external_url_domain } = parse(external_url);
+  const result = parse(external_url);
+  const { domain: _external_url_domain } = result;
   if (!_external_url_domain) {
     throw new Error(
-      `External URL domain could not be extracted from markdown file: ${id}`
+      [
+        `The domain for this note could not be extracted from the markdown file`,
+        `  file: ${id}`,
+        `  external_url: ${external_url}`,
+        `  parse library result: ${JSON.stringify(result)}`,
+      ].join("\n")
     );
   }
 
