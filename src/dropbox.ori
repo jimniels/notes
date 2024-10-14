@@ -1,4 +1,4 @@
 @cache(
-  @package:@weborigami/dropbox(dropboxCreds.js(), "notes")
+  @package:@weborigami/dropbox(dropboxCreds.js())/notes
   @files/cache
 )
