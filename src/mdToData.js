@@ -18,6 +18,9 @@ export default function mdToData(fileBuffer, fileName) {
   let title = "";
   let tags = undefined;
   let external_url = "";
+  // For debugging
+  let matches = null;
+  let matchedLine = null;
 
   // Extract `title` and `tags` from the markdown document
   // Then convert everything else to HTML
@@ -39,7 +42,7 @@ export default function mdToData(fileBuffer, fileName) {
     }
     // If it's the <h1>, extract it
     else if (line.startsWith("# ")) {
-      const matches = line.match(/# \[(.+?)\]\((.+?)\)/);
+      matches = line.match(/# \[(.+?)\]\((.+?)\)/);
       if (matches === null) {
         throw new Error(
           `<h1> could not be extracted from markdown file: ${id}`
@@ -49,21 +52,28 @@ export default function mdToData(fileBuffer, fileName) {
       external_url = matches[2];
 
       // Remove the line
+      matchedLine = line;
       markdownByLine.splice(i, 1);
       break;
     }
   }
 
+  if (!external_url) {
+    throw new Error(
+      [
+        `The external_url for this note could not be extracted from the markdown file`,
+        `  file: ${id}`,
+        `  line: ${matchedLine}`,
+        `  matches: ${matches}`,
+        `  markdown: ${markdown}`,
+      ].join("\n")
+    );
+  }
   const result = parse(external_url);
   const { domain: _external_url_domain } = result;
   if (!_external_url_domain) {
     throw new Error(
-      [
-        `The domain for this note could not be extracted from the markdown file`,
-        `  file: ${id}`,
-        `  external_url: ${external_url}`,
-        `  parse library result: ${JSON.stringify(result)}`,
-      ].join("\n")
+      `The domain for this note could not be extracted from the markdown file: ${id}`
     );
   }
 
