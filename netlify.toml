@@ -7,3 +7,6 @@
   for = "/notes.json"
     [headers.values]
     Access-Control-Allow-Origin = "*"
+
+[build.environment]
+  NODE_VERSION = "22"
