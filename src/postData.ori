@@ -3,5 +3,5 @@
   title: "Jim Nielsen’s Notes"
   home_page_url: "https://notes.jim-nielsen.com"
   feed_url: "https://notes.jim-nielsen.com/feed.json"
-  items: @values(@merge(postDataFromDropbox.ori, postDataFromBlog.ori))
+  items: tree:values(tree:merge(postDataFromDropbox.ori, postDataFromBlog.ori))
 }
