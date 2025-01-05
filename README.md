@@ -18,7 +18,7 @@ Each "post" is a markdown file. File names follow this format: `YYYY-MM-DDTHHMM.
 Each markdown file follows this pattern (tags optional but prefixed with `_` to differentiate them in iA Writer from [my blog’s](https://blog.jim-nielsen.com) posts). **No exceptions.**
 
 ```md
-#_article #_twitter #_rss
+#\_article #\_twitter #\_rss
 
 # [Name of the article I link to](https://example.com/path/to/article)
 
@@ -72,3 +72,7 @@ Will require:
 2. Script that gets all files, parses them into `db.json` file, and turns them into static files (and feed files)
 3. Add a thing to all reading notes posts that indicate they are now reposted on `notes.jim-nielsen.com` — or do a redirect? from old blog reading notes posts to new `notes.jim-nielsen.com` - this might be a little weird...
 4.
+
+## Notes to self
+
+The very first file (post) on `notes.jim-nielsen.com` was `2023-02-02T2100.md`. All files _before_ that were ported from my old blog’s reading notes.
