@@ -43,7 +43,7 @@ export default function template(items, args = {}) {
             <header>
               <h1><a href="${external_url}">${title}</a></h1>
               <p class="domain">
-                <a href="/by/domain/${_external_url_domain}/">
+                <a href="/by/link/${_external_url_domain}/">
                   <span class="highlight">${_external_url_domain}</span>
                 </a>
               </p>
@@ -53,7 +53,7 @@ export default function template(items, args = {}) {
               <ul>
                 <li>
                   🔗
-                  <a href="/by/id/${id}/">
+                  <a href="/id/${id}/">
                     <time datetime="${date_published}"
                       >${date_published.slice(0, 10)}</time
                     ></a
