@@ -2,6 +2,8 @@ import fs from "fs";
 import html from "html";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { themes } from "./routes/Theme.js";
+import Document from "./components/Document.js";
 
 const srcPath = path.dirname(fileURLToPath(import.meta.url));
 
@@ -14,416 +16,67 @@ const normalize = fs
 const importSvg = (file, label) =>
   fs.readFileSync(path.resolve(srcPath, "svgs", file)).toString();
 
-const themes = {
-  Yamble: {
-    bg: "#00171f",
-    text: "#ffffff",
-    "text-secondary": "#007ea7",
-    highlight: "#00a8e8",
-  },
-  Halloween: {
-    bg: "#252422",
-    text: "#fffcf2",
-    "text-secondary": "#ccc5b9",
-    highlight: "#eb5e28",
-  },
-  Cadete: {
-    bg: "#2b2d42",
-    text: "#edf2f4",
-    "text-secondary": "#8d99ae",
-    highlight: "#ef233c",
-  },
-  Zizzoo: {
-    bg: "#000000",
-    text: "#ffffff",
-    "text-secondary": "#999",
-    highlight: "#fca311",
-  },
-  Valentines: {
-    bg: "#590d22",
-    text: "#fff0f3",
-    "text-secondary": "#ff8fa3",
-    highlight: "#ff4d6d",
-  },
-  WWW: {
-    bg: "#fff",
-    text: "#000",
-    "text-secondary": "#999",
-    highlight: "#0000EE",
-  },
-  Woods: {
-    bg: "#fefae0",
-    text: "#283618",
-    "text-secondary": "#606c38",
-    highlight: "#bc6c25",
-  },
-  Jazz: {
-    bg: "#03071e",
-    text: "#fff9e8",
-    "text-secondary": "#f48c06",
-    highlight: "#dc2f02",
-  },
-};
-
-export default function template(items) {
+export default function template(items, args = {}) {
   const activeThemeName = Object.keys(themes)[0];
-  return html`<!DOCTYPE html>
-    <html lang="en" data-theme="${activeThemeName}" id="top">
-      <head>
-        <meta charset="UTF-8" />
-        <title>Jim Nielsen’s Notes</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <script
-          type="module"
-          src="https://www.jim-nielsen.com/jim-navbar.js"
-        ></script>
-        <link rel="icon" href="/favicon.ico" />
-        <link
-          rel="alternate"
-          type="application/rss+xml"
-          title="RSS Feed"
-          href="/feed.xml"
-        />
-        <link
-          rel="alternate"
-          type="application/json"
-          title="JSON Feed"
-          href="/feed.json"
-        />
-        <link rel="me" href="https://github.com/jimniels" />
-        <link rel="me" href="https://twitter.com/jimniels" />
-        <link rel="me" href="https://mastodon.social/@jimniels" />
-        <link rel="me" href="https://dribbble.com@jimniels" />
 
-        <style>
-          ${normalize}
-            ${Object.entries(themes).map(
-              ([name, colors]) => html`
-                :root[data-theme="${name}"] {
-                ${Object.entries(colors).map(
-                  ([key, value]) => `--c-${key}: ${value};`
-                )}
-                }
-              `
-            )}
-            html {
-            background: var(--c-bg);
-            scroll-behavior: smooth;
-          }
+  /** @type {Array<{label: string, href: string}>} */
+  const breadcrumbs = args.breadcrumbs || [];
 
-          html,
-          body {
-            font-size: 1em;
-          }
-          body {
-            font-family: Verdana, "Helvetica Neue", sans-serif;
-            line-height: 1.5;
-            max-width: 30rem;
-            width: 90%;
-            margin: 0 auto;
-            color: var(--c-text);
-          }
-
-          a {
-            color: inherit;
-            text-decoration: none;
-            border-bottom: 1px solid;
-            transition: 0.1s ease color;
-          }
-          a:hover {
-            color: var(--c-highlight);
-            border-bottom: 2px solid var(--c-highlight);
-          }
-
-          pre {
-            overflow: scroll;
-          }
-
-          body > header {
-            margin: 4rem 0 0;
-            position: relative;
-          }
-          body > header h1 {
-            line-height: 1;
-            text-indent: 11rem;
-          }
-          body > header h1:after {
-            content: "";
-            width: 0.25rem;
-            height: 1.25em;
-            background-color: var(--c-highlight);
-            display: inline-block;
-            position: relative;
-            top: 0.2em;
-            animation: 1s blink step-end infinite;
-          }
-          body > header > :is(h1, p) {
-            margin: 0.5rem 0;
-            position: relative;
-            z-index: 1;
-          }
-          body > header p {
-            color: var(--c-text-secondary);
-            padding-left: 3rem;
-            line-height: 1.3;
-          }
-          body > header svg {
-            position: absolute;
-            left: -20px;
-            top: -30px;
-            fill: var(--c-highlight);
-            z-index: 0;
-          }
-          @keyframes blink {
-            from,
-            to {
-              opacity: 1;
-            }
-            50% {
-              opacity: 0;
-            }
-          }
-
-          article > header > p {
-            color: var(--c-text-secondary);
-            font-size: 0.8125rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05rem;
-            margin-bottom: 0;
-          }
-          article > footer {
-            color: var(--c-text-secondary);
-            font-size: 0.8125rem;
-            margin-bottom: 0;
-          }
-          article > footer > ul {
-            display: flex;
-            list-style-type: none;
-            gap: 0.5rem;
-            padding: 0;
-          }
-          article > footer > ul li:not(:last-child):after {
-            content: " · ";
-            padding: 0 0.25rem;
-          }
-
-          article header {
-            display: flex;
-            flex-direction: column;
-          }
-          article header h1 {
-            order: 2;
-          }
-          article h1 {
-            text-transform: uppercase;
-            letter-spacing: 0.0125rem;
-          }
-          article :is(h1, h2, h3, h4) {
-            font-size: 1rem;
-          }
-          blockquote {
-            border-left: 1px solid var(--c-highlight);
-            margin: 0;
-            padding-left: calc(1.618rem / 2);
-          }
-          article {
-            margin-bottom: 5rem;
-            padding-top: 5rem; /* enough space when anchoring to a thing */
-            overflow-wrap: break-word;
-          }
-
-          body > footer {
-            margin: calc(100vh - 6rem) 0 2rem;
-            color: var(--c-text-secondary);
-            font-size: 0.75rem;
-          }
-
-          .highlight {
-            color: var(--c-highlight);
-          }
-
-          nav {
-            position: sticky;
-            top: 0;
-            left: 0;
-            margin-left: -2rem;
-            display: flex;
-            gap: 1rem;
-            z-index: 10;
-            background: var(--c-bg);
-            padding: 1rem 0 0.25rem 2rem;
-          }
-          nav:after {
-            content: "";
-            position: absolute;
-            width: 100%;
-            top: 100%;
-            left: 0;
-            height: 3rem;
-            background: linear-gradient(0deg, transparent, var(--c-bg));
-            pointer-events: none;
-          }
-
-          @media screen and (min-width: 600px) {
-            body {
-              margin: 0 0 0 2rem;
-            }
-            nav {
-              left: 2rem;
-            }
-          }
-
-          nav a {
-            border: none !important;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            box-shadow: 0 0 0 10px var(--c-bg);
-            background: var(--c-bg);
-            transition: 0.3s ease transform;
-          }
-          nav a:active {
-            transform: scale(0.9);
-          }
-          nav a:first-child {
-            z-index: 100;
-          }
-
-          [data-open-theme] nav > a:first-child svg,
-          nav a:hover svg {
-            fill: var(--c-highlight);
-          }
-
-          nav svg {
-            fill: var(--c-text-secondary);
-            transition: 0.3s ease fill;
-          }
-        </style>
-      </head>
-      <body>
-        <jim-navbar></jim-navbar>
-        <nav>
-          <a href="#js-theme" title="Change theme" aria-label="Change theme"
-            >${importSvg("icon-theme.svg")}</a
+  const children = html`
+    ${items
+      .map(
+        ({
+          id,
+          content_html,
+          content_text,
+          date_published,
+          title,
+          url,
+          external_url,
+          _external_url_domain,
+          tags,
+        }) => html`
+          <article
+            id="${id}"
+            ${tags ? html`data-tags="${tags.join(" ")}"` : ""}
           >
-          <a
-            href="#${items[Math.floor(Math.random() * items.length)].id}"
-            title="Jump to random note"
-            aria-label="Jump to random note"
-            class="js-shuffle"
-          >
-            ${importSvg("icon-shuffle.svg")}
-          </a>
-          <a href="#top" title="Jump to top" aria-label="Jump to top"
-            >${importSvg("icon-jump.svg")}</a
-          >
-          <a href="/feed.xml" title="RSS feed" arial-label="RSS feed"
-            >${importSvg("icon-rss.svg")}</a
-          >
-          <a href="/feed.json" title="JSON feed" arial-label="JSON feed"
-            >${importSvg("icon-json.svg")}</a
-          >
-          ${Theme({ activeThemeName })}
-        </nav>
-        <header>
-          <h1>Notes</h1>
-          <p>
-            Note-icing the words of others. Fodder for
-            <a href="https://blog.jim-nielsen.com">my blog</a>.
-          </p>
-          ${importSvg("signature.svg")}
-        </header>
+            <header>
+              <h1><a href="${external_url}">${title}</a></h1>
+              <p class="domain">
+                <a href="/by/domain/${_external_url_domain}/">
+                  <span class="highlight">${_external_url_domain}</span>
+                </a>
+              </p>
+            </header>
+            ${content_html}
+            <footer class="de-emphasized">
+              <ul>
+                <li>
+                  🔗
+                  <a href="/by/id/${id}/">
+                    <time datetime="${date_published}"
+                      >${date_published.slice(0, 10)}</time
+                    ></a
+                  >
+                </li>
+                ${tags
+                  ? tags.map(
+                      (tag) => `<li><a href="/by/tag/${tag}/">#${tag}</a></li>`
+                    )
+                  : ""}
+              </ul>
+            </footer>
+          </article>
+        `
+      )
+      .join("")}
+  `;
 
-        <!-- ${Search(items)} -->
-        ${
-          /*
-    <select>
-    ${Object.entries(
-    items.reduce((acc, item) => {
-      if (acc[item._external_url_domain]) {
-        acc[item._external_url_domain]++;
-      } else {
-        acc[item._external_url_domain] = 1;
-      }
-      return acc;
-    }, {})
-    )
-    .sort(([domainA, countA], [domainB, countB]) =>
-      countA < countB ? 1 : countA > countB ? -1 : 0
-    )
-    .map(
-      ([domain, count]) =>
-        `<option value="${count}">${domain} (${count})</option>`
-    )}
-    </select>*/ ""
-        }
-        <main>
-          ${items
-            .map(
-              ({
-                id,
-                content_html,
-                content_text,
-                date_published,
-                title,
-                url,
-                external_url,
-                _external_url_domain,
-                tags,
-              }) => html`
-                <article
-                  id="${id}"
-                  ${tags ? html`data-tags="${tags.join(" ")}"` : ""}
-                >
-                  <header>
-                    <h1><a href="${external_url}">${title}</a></h1>
-                    <p class="byline">
-                      <span class="highlight">${_external_url_domain}</span>
-                    </p>
-                  </header>
-                  ${content_html}
-                  <footer class="de-emphasized">
-                    <ul>
-                      <li>
-                        <a href="#${id}"
-                          ><time datetime="${date_published}"
-                            >${date_published.slice(0, 10)}</time
-                          ></a
-                        >
-                      </li>
-                      ${tags ? tags.map((tag) => `<li>#${tag}</li>`) : ""}
-                    </ul>
-                  </footer>
-                </article>
-              `
-            )
-            .join("")}
-        </main>
-        <footer>
-          Holy cow, you made it all the way to the bottom? Look at you 👏
-          <br />
-          <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-            >Here’s a special gift.</a
-          >
-        </footer>
-
-        <script>
-          // Shuffle jump to link
-          const min = 0;
-          const max = ${items.length};
-          document
-            .querySelector(".js-shuffle")
-            .addEventListener("click", (e) => {
-              e.preventDefault();
-              const rand = Math.floor(Math.random() * max) + min;
-              Array.from(document.querySelectorAll("article"))[
-                rand
-              ].scrollIntoView();
-            });
-        </script>
-      </body>
-    </html>`;
+  return Document({
+    site: { items },
+    children,
+    breadcrumbs,
+  });
 }
 
 function Search(items) {
