@@ -80,45 +80,70 @@ export default function Document({ site, children, breadcrumbs }) {
           <!-- <a href="/" title="Home" aria-label="Home" aria-current=""
             >${importSvg("icon-home.svg")}</a
           > -->
-          <a href="#js-theme" title="Change theme" aria-label="Change theme"
-            >${importSvg("icon-theme.svg")}</a
-          >
-          <a
-            href="/by/id/${randomNoteId}"
-            title="Jump to random note"
-            aria-label="Jump to random note"
-            class="js-shuffle"
-          >
-            ${importSvg("icon-shuffle.svg")}
-          </a>
-          <a href="/feed.xml" title="RSS feed" arial-label="RSS feed"
-            >${importSvg("icon-rss.svg")}</a
-          >
-          <a href="/about/" title="About" aria-label="About" aria-current=""
-            >${importSvg("icon-about.svg")}</a
-          >
+          <ul class="nav-links">
+            <li>
+              <a
+                href="#js-theme"
+                title="Change theme"
+                aria-label="Change theme"
+                class="nav-icon"
+                >${importSvg("icon-theme.svg")}</a
+              >
+            </li>
+            <li>
+              <a
+                href="/by/id/${randomNoteId}"
+                title="Jump to random note"
+                aria-label="Jump to random note"
+                class="nav-icon js-shuffle"
+              >
+                ${importSvg("icon-shuffle.svg")}
+              </a>
+            </li>
+            <li>
+              <a
+                href="/feed.xml"
+                title="RSS feed"
+                aria-label="RSS feed"
+                class="nav-icon"
+              >
+                ${importSvg("icon-rss.svg")}
+              </a>
+            </li>
+          </ul>
+
+          <ul class="breadcrumbs">
+            ${breadcrumbs.length > 0
+              ? html`<li>
+                    <a href="/">Jim’s Notes</a>
+                  </li>
+                  ${breadcrumbs.map(
+                    ({ label, href }, i) => html`
+                      <li>
+                        <a
+                          href="${href}"
+                          ${i === breadcrumbs.length - 1
+                            ? "aria-current='page'"
+                            : ""}
+                          >${label}</a
+                        >
+                      </li>
+                    `
+                  )}`
+              : html`
+                  <li>
+                    <a href="/" aria-current="page" style="color: var(--c-text)"
+                      >Jim’s Notes</a
+                    >
+                  </li>
+                  <li>
+                    <a href="/by/">By…</a>
+                  </li>
+                `}
+          </ul>
+
           ${Theme({ activeThemeName })}
         </nav>
-        <ul class="breadcrumbs">
-          ${breadcrumbs.length > 0
-            ? html`<li>
-                  <a href="/">Notes</a>
-                </li>
-                ${breadcrumbs.map(
-                  ({ label, href }, i) => html`
-                    <li>
-                      <a
-                        href="${href}"
-                        ${i === breadcrumbs.length - 1
-                          ? "aria-current='page'"
-                          : ""}
-                        >${label}</a
-                      >
-                    </li>
-                  `
-                )}`
-            : html` <li><a href="/" aria-current="page">Notes</a></li> `}
-        </ul>
 
         <main>${children}</main>
         <footer>
