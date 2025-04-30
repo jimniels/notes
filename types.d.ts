@@ -6,6 +6,16 @@ export type Site = {
   home_page_url: string;
   feed_url: string;
   items: Array<Note>;
+
+  notesById: Record<string, Note>;
+  noteIds: Array<string>;
+  tagsById: Record<
+    string,
+    {
+      postIds: Array<string>;
+    }
+  >;
+  tagIds: Array<string>;
 };
 
 export type Note = {

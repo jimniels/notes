@@ -1,10 +1,186 @@
 {
-  _postData = postData.ori/
-  _truncatedPostData = { ..._postData, items: tree:take(_postData/items, 20) }
-  public = {
-    index.html = index.dev.js(_postData/items)
-    favicon.ico
-    feed.json = origami:json(_truncatedPostData)
-    feed.xml = site:rss(_truncatedPostData)
+  (postData) = postData.ori/
+  (truncatedPostData) = { ...postData, items: tree:take(postData/items, 20) }
+  
+  ...static/
+  index.html = index.js(postData/items)
+  favicon.ico
+  feed.json = origami:json(truncatedPostData)
+  feed.xml = site:rss(truncatedPostData)
+
+  id = tree:map(postData/items, {
+    key: (post) => post/id
+    value: (post) => {
+      index.html: index.js([post], {
+        breadcrumbs: [
+          {
+            label: post/id,
+            href: "/id/" + post/id
+          }
+        ]
+      })
+    }
+  })
+
+  // /by/tag|link|year
+  by = {
+    index.html = components/Document.js({
+      site: { items: postData/items },
+      breadcrumbs: [
+        {
+          label: "By",
+          href: "/by/"
+        }
+      ],
+      children:`<h1>By</h1>
+      <ul>
+        <li><a href="/by/year/">Year</a></li>
+        <li><a href="/by/tag/">Tag</a></li>
+        <li><a href="/by/link/">Link</a></li>
+      </ul>`})
+    
+    (postsByYear) = tree:reverse(tree:sort(tree:group(postData/items, (post) => post/date_published/slice(0, 4))))
+    year = {
+      index.html: components/Document.js({
+        site: { items: postData/items },
+        breadcrumbs: [
+          {
+            label: "By",
+            href: "/by/"
+          },
+          {
+            label: "Year",
+            href: "/by/year/"
+          }
+        ],
+        children: `
+        <ul>
+          ${tree:map(postsByYear, (posts, year) => `
+            <li><a href="/by/year/${year}/">${year} (${posts/length})</a></li>
+          `)} 
+        </ul>
+        `
+      }),
+
+      ...tree:map(postsByYear, {
+        key: (posts, year) => year
+        value: (posts, year) => {
+          index.html: index.js(posts, {
+            breadcrumbs: [
+              {
+                label: "By",
+                href: "/by/"
+              },
+              {
+                label: "Year",
+                href: "/by/year/"
+              },
+              {
+                label: `${origami:slash/remove(year)} (${posts/length})`,
+                href: "/by/year/" + year
+              }
+            ]
+          })
+        }
+      }) 
+    }
+
+    link = {
+      index.html: components/Document.js({
+        site: { items: postData/items },
+        breadcrumbs: [
+          {
+            label: "By",
+            href: "/by/"
+          },
+          {
+            label: "Link",
+            href: "/by/link/"
+          }
+        ],
+        children: `
+      <table>
+      <thead>
+        <tr>
+          <th>Link</th>
+          <th>Count</th>
+        </tr>
+      </thead>  
+      <tbody>
+      ${tree:map(
+        tree:reverse(tree:sort(postsByDomain.js(postData/items), (posts) => posts/length),)
+        (posts, domain) => `<tr>
+          <td><a href="/by/link/${domain}/">${domain}</a></td>
+          <td>${posts/length}</td>
+        </tr>`,
+      )}
+      </tbody>
+      </table>
+      `}),
+      ...tree:map(postsByDomain.js(postData/items), {
+        key: (posts, domain) => domain,
+        value: (posts, domain) => {
+          index.html: index.js(posts, {
+            breadcrumbs: [
+              {
+                label: "By",
+                href: "/by/"
+              },
+              {
+                label: "Link",
+                href: "/by/link/"
+              },
+              {
+                label: `${origami:slash/remove(domain)} (${posts/length})`,
+                href: "/by/link/" + domain
+              }
+            ]
+          })
+        }
+      })
+    }
+
+    (postsByTag) = tree:reverse(tree:sort(tree:group(postData/items, (post) => post/tags), (tags) => tags/length))
+    tag = {
+      index.html: components/Document.js({
+        site: { items: postData/items },
+        breadcrumbs: [
+          {
+            label: "By",
+            href: "/by/"
+          },
+          {
+            label: "Tag",
+            href: "/by/tag/"
+          },
+        ],
+        children: `
+          <ul>
+            ${tree:map(postsByTag, (posts, tag) => `<li><a href="/by/tag/${tag}/">${tag}</a> (${posts/length})</li>`)}
+          </ul>
+        `
+      })
+      ...tree:map(postsByTag, {
+        key: (posts, tag) => tag,
+        value: (posts, tag) => {
+          index.html: index.js(posts, {
+            breadcrumbs: [
+              {
+                label: "By",
+                href: "/by/"
+              },
+              {
+                label: "Tag",
+                href: "/by/tag/"
+              },
+              {
+                label: `${origami:slash/remove(tag)} (${posts/length})`,
+                href: "/by/tag/" + tag
+              }
+            ]
+          })
+        }
+      })
+    }
   }
-}/public
+}
