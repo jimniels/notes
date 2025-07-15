@@ -66,7 +66,7 @@ const themes = {
 };
 
 export default function template(items) {
-  const activeThemeName = Object.keys(themes)[0];
+  const activeThemeName = Object.keys(themes)[5];
   return html`<!DOCTYPE html>
     <html lang="en" data-theme="${activeThemeName}" id="top">
       <head>
@@ -75,7 +75,7 @@ export default function template(items) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script
           type="module"
-          src="https://www.jim-nielsen.com/jim-navbar.js"
+          src="https://cdn.jim-nielsen.com/shared/jim-site-switcher.js"
         ></script>
         <link rel="icon" href="/favicon.ico" />
         <link
@@ -302,7 +302,7 @@ export default function template(items) {
         </style>
       </head>
       <body>
-        <jim-navbar></jim-navbar>
+        <jim-site-switcher subdomain="notes"></jim-site-switcher>
         <nav>
           <a href="#js-theme" title="Change theme" aria-label="Change theme"
             >${importSvg("icon-theme.svg")}</a
@@ -320,9 +320,6 @@ export default function template(items) {
           >
           <a href="/feed.xml" title="RSS feed" arial-label="RSS feed"
             >${importSvg("icon-rss.svg")}</a
-          >
-          <a href="/feed.json" title="JSON feed" arial-label="JSON feed"
-            >${importSvg("icon-json.svg")}</a
           >
           ${Theme({ activeThemeName })}
         </nav>
