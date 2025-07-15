@@ -79,13 +79,10 @@ export default function template(items) {
         <meta charset="UTF-8" />
         <title>Jim Nielsen’s Notes</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <script>
-          ${fs
-            .readFileSync(
-              "/Users/jimnielsen/Dropbox/cdn/shared/jim-site-switcher.js"
-            )
-            .toString()};
-        </script>
+        <script
+          type="module"
+          src="https://cdn.jim-nielsen.com/shared/jim-site-switcher.js"
+        ></script>
         <link rel="icon" href="/favicon.ico" />
         <link
           rel="alternate"
