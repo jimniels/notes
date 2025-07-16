@@ -63,19 +63,25 @@ const themes = {
     "text-secondary": "#f48c06",
     highlight: "#dc2f02",
   },
+  Notes: {
+    bg: "#fff",
+    text: "#001d32",
+    "text-secondary": "#97a2aa",
+    highlight: "#0093ff",
+  },
 };
 
 export default function template(items) {
-  const activeThemeName = Object.keys(themes)[0];
+  // const activeThemeName = Object.keys(themes)[5];
   return html`<!DOCTYPE html>
-    <html lang="en" data-theme="${activeThemeName}" id="top">
+    <html lang="en" data-theme="Notes" id="top">
       <head>
         <meta charset="UTF-8" />
         <title>Jim Nielsen’s Notes</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script
           type="module"
-          src="https://www.jim-nielsen.com/jim-navbar.js"
+          src="https://cdn.jim-nielsen.com/shared/jim-site-switcher.js"
         ></script>
         <link rel="icon" href="/favicon.ico" />
         <link
@@ -264,14 +270,14 @@ export default function template(items) {
             pointer-events: none;
           }
 
-          @media screen and (min-width: 600px) {
+          /*@media screen and (min-width: 600px) {
             body {
               margin: 0 0 0 2rem;
             }
             nav {
               left: 2rem;
             }
-          }
+          }*/
 
           nav a {
             border: none !important;
@@ -302,11 +308,11 @@ export default function template(items) {
         </style>
       </head>
       <body>
-        <jim-navbar></jim-navbar>
+        <jim-site-switcher subdomain="notes"></jim-site-switcher>
         <nav>
-          <a href="#js-theme" title="Change theme" aria-label="Change theme"
+          <!-- <a href="#js-theme" title="Change theme" aria-label="Change theme"
             >${importSvg("icon-theme.svg")}</a
-          >
+          > -->
           <a
             href="#${items[Math.floor(Math.random() * items.length)].id}"
             title="Jump to random note"
@@ -315,16 +321,11 @@ export default function template(items) {
           >
             ${importSvg("icon-shuffle.svg")}
           </a>
-          <a href="#top" title="Jump to top" aria-label="Jump to top"
-            >${importSvg("icon-jump.svg")}</a
-          >
+
           <a href="/feed.xml" title="RSS feed" arial-label="RSS feed"
             >${importSvg("icon-rss.svg")}</a
           >
-          <a href="/feed.json" title="JSON feed" arial-label="JSON feed"
-            >${importSvg("icon-json.svg")}</a
-          >
-          ${Theme({ activeThemeName })}
+          ${/*Theme({ activeThemeName })}*/ ""}
         </nav>
         <header>
           <h1>Notes</h1>
