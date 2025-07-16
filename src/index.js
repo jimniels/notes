@@ -321,9 +321,7 @@ export default function template(items) {
           >
             ${importSvg("icon-shuffle.svg")}
           </a>
-          <a href="#top" title="Jump to top" aria-label="Jump to top"
-            >${importSvg("icon-jump.svg")}</a
-          >
+
           <a href="/feed.xml" title="RSS feed" arial-label="RSS feed"
             >${importSvg("icon-rss.svg")}</a
           >
