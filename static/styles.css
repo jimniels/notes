@@ -1,5 +1,18 @@
-/* prettier-ignore */
-${https://cdn.jsdelivr.net/npm/normalize.css}
+:root[data-theme="Notes"] {
+  --c-bg: #fff;
+  --c-text: #001d32;
+  --c-text-secondary: #97a2aa;
+  --c-highlight: #0093ff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="Notes"] {
+    --c-bg: #001423;
+    --c-text: #fff;
+    --c-text-secondary: #97a2aa;
+    --c-highlight: #0093ff;
+  }
+}
 
 html {
   background: var(--c-bg);
@@ -159,14 +172,14 @@ nav:after {
   pointer-events: none;
 }
 
-@media screen and (min-width: 600px) {
-  body {
-    margin: 0 0 0 2rem;
-  }
-  nav {
-    left: 2rem;
-  }
-}
+/*@media screen and (min-width: 600px) {
+            body {
+              margin: 0 0 0 2rem;
+            }
+            nav {
+              left: 2rem;
+            }
+          }*/
 
 nav a {
   border: none !important;
@@ -194,10 +207,3 @@ nav svg {
   fill: var(--c-text-secondary);
   transition: 0.3s ease fill;
 }
-
-/* prettier-ignore */
-${@map(theme.json, (colors, name) => `
-  :root[data-theme="${name}"] {
-    ${@map(colors, (value, key) => `--c-${key}: ${value};`)} 
-  }  
-`)}

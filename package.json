@@ -2,13 +2,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "ori serve watch src, =debug src/site.ori",
-    "build": "ori copy src/site.ori, clear files:build",
-    "postbuild": "html-minifier --collapse-whitespace --remove-empty-attributes --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-attribute-quotes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true build/index.html -o build/index.html"
+    "start": "ori serve watch src, =debug src/site.jse",
+    "build": "ori copy src/site.jse, clear files:build",
+    "postbuildz": "html-minifier --collapse-whitespace --remove-empty-attributes --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-attribute-quotes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true build/index.html -o build/index.html"
   },
   "dependencies": {
-    "@weborigami/dropbox": "0.0.10",
-    "@weborigami/origami": "0.1.0",
+    "@weborigami/dropbox": "0.0.11",
+    "@weborigami/origami": "0.3.4-jse.5",
     "dotenv": "^16.4.5",
     "html": "github:jimniels/html",
     "html-minifier": "^4.0.0",

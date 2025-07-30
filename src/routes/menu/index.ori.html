@@ -1,0 +1,18 @@
+<h1>Menu</h1>
+
+<h2>Notes by year</h2>
+<!-- prettier-ignore -->
+<ul>
+  ${
+    tree:map(
+      tree:reverse(
+        tree:sort(
+          tree:group(_, (post) => post/date_published/slice(0, 4))
+        )
+      ),
+      (posts, year) => `
+        <li><a href="/by/year/${year}/">${year}</a> (${posts/length})</li>
+      `
+    )
+  }
+</ul>

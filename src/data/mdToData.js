@@ -7,7 +7,7 @@ import { parse } from "tldts";
 /**
  * @param {Buffer} fileBuffer
  * @param {string} fileName
- * @returns {import("../types").Note}
+ * @returns {import("../../types").Note}
  */
 export default function mdToData(fileBuffer, fileName) {
   const markdown = toString(fileBuffer);
