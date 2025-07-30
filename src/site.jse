@@ -7,8 +7,7 @@
   ...(<../static>),
   feed.json = Origami.json(site_truncated)
   feed.xml = Origami.rss(site_truncated)
-
-  index.html = <routes/index.jse>(site_truncated)
+  index.html = <routes/index.jse>(site)
 
   // n = tree:map(_postData/items, {
   //   key: (post) => post/id
@@ -19,11 +18,5 @@
   //     })
   //   }
   // })
-  // menu = {
-  //   index.html = ./templates/Page.ori.html({
-  //     title: "Menu",
-  //     children: ./menu/index.ori.html(_postData/items)
-  //   })
-  // }
 }
 
