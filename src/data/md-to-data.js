@@ -9,7 +9,7 @@ import { parse } from "tldts";
  * @param {string} fileName
  * @returns {import("../../types").Note}
  */
-export default function mdToData(fileBuffer, fileName) {
+export default function md_to_data(fileBuffer, fileName) {
   const markdown = toString(fileBuffer);
   const id = path.basename(fileName, ".md");
   const date_published = extractDate(id);

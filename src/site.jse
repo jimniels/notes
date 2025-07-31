@@ -1,6 +1,6 @@
 {
   // Private vars
-  (site) = <data/postData.ori>
+  (site) = <data/site-data.jse>
   (site_truncated) = {...site, items: Tree.take(site.items, 20) }
 
   // Public files
