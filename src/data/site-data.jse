@@ -1,0 +1,13 @@
+{
+  // (notes_md) = Tree.cache(
+  //   package:@weborigami/dropbox(<dropbox-creds.js>())/notes
+  //   files:cache
+  // )
+  // (notes_data) = Tree.reverse(Tree.sort(Tree.map(notes_md, <md-to-data.js>)))
+
+  version: "https://jsonfeed.org/version/1"
+  title: "Jim Nielsen’s Notes"
+  home_page_url: "https://notes.jim-nielsen.com"
+  feed_url: "https://notes.jim-nielsen.com/feed.json"
+  items: <md-to-data.jse>/
+}

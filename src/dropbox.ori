@@ -1,4 +1,0 @@
-tree:cache(
-  package:@weborigami/dropbox(dropboxCreds.js())/notes
-  files:cache
-)

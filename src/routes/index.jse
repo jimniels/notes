@@ -1,0 +1,7 @@
+(site) => <templates/Page.jse.html>({
+  title: "Jim Nielsen’s Notes",
+  children: Tree.map(
+    site.items,
+    (item) => <templates/Note.jse.html>(item)
+  )
+})

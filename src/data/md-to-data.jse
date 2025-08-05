@@ -1,0 +1,10 @@
+Tree.values(
+  Tree.reverse(
+    Tree.sort(
+      Tree.map(
+        <dropbox-to-md.jse>,
+        <md-to-data.js>
+      )
+    )
+  )
+)

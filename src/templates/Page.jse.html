@@ -1,17 +1,13 @@
-<!-- 
-  @property {Object} _ - data passed to the template
-  @property {ThemesById} _.themesById
-  @property {Note[]} _.notes
--->
+<!-- ( _ : { children: string, title: string } ) -->
 <!DOCTYPE html>
-<html lang="en" data-theme="${@keys(_/themesById)/0}" id="top">
+<html lang="en" data-theme="Notes" id="top">
   <head>
     <meta charset="UTF-8" />
-    <title>Jim Nielsen’s Notes</title>
+    <title>${_.title}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script
       type="module"
-      src="https://www.jim-nielsen.com/jim-navbar.js"
+      src="https://cdn.jim-nielsen.com/shared/jim-site-switcher.js"
     ></script>
     <link rel="icon" href="/favicon.ico" />
     <link
@@ -31,43 +27,37 @@
     <link rel="me" href="https://mastodon.social/@jimniels" />
     <link rel="me" href="https://dribbble.com@jimniels" />
 
-    <!-- prettier-ignore -->
-    <style>${/*@inline(index.css)*/""}</style>
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <jim-navbar></jim-navbar>
+    <jim-site-switcher subdomain="notes"></jim-site-switcher>
     <nav>
-      <a href="#js-theme" title="Change theme" aria-label="Change theme"
-        >${../svgs/icon-theme.svg}</a
+      <a href="#top" title="Jump to top" aria-label="Jump to top"
+        >${<svgs/icon-jump.svg>}</a
       >
       <a
-        href="#TODO: {items[Math.floor(Math.random() * items.length)].id}"
+        href="#"
         title="Jump to random note"
         aria-label="Jump to random note"
         class="js-shuffle"
       >
-        ${../svgs/icon-shuffle.svg}
+        ${<svgs/icon-shuffle.svg>}
       </a>
-      <a href="#top" title="Jump to top" aria-label="Jump to top"
-        >${../svgs/icon-jump.svg}</a
-      >
+
       <a href="/feed.xml" title="RSS feed" arial-label="RSS feed"
-        >${../svgs/icon-rss.svg}</a
+        >${<svgs/icon-rss.svg>}</a
       >
-      <a href="/feed.json" title="JSON feed" arial-label="JSON feed"
-        >${../svgs/icon-json.svg}</a
-      >
-      TODO: Theme({ activeThemeName })
+
+      <!-- <a href="/menu/" title="Menu" arial-label="Menu" style="margin-left: auto"
+        >${<svgs/icon-menu.svg>}</a
+      > -->
     </nav>
     <header>
       <h1>Notes</h1>
-      <p>
-        Note-icing the words of others. Fodder for
-        <a href="https://blog.jim-nielsen.com">my blog</a>.
-      </p>
-      ${../svgs/signature.svg}
+      <p>Quoting others & adding my 2¢ — a microblog.</p>
+      ${<svgs/signature.svg>}
     </header>
-    <main></main>
+    <main>${_.children}</main>
     <footer>
       Holy cow, you made it all the way to the bottom? Look at you 👏
       <br />
@@ -78,7 +68,7 @@
     <script>
       // Shuffle jump to link
       const min = 0;
-      const max = ${@values(_/notes)/length};
+      const max = document.querySelectorAll("article").length;
       document.querySelector(".js-shuffle").addEventListener("click", (e) => {
         e.preventDefault();
         const rand = Math.floor(Math.random() * max) + min;
