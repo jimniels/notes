@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@weborigami/dropbox": "0.0.11",
-    "@weborigami/origami": "0.3.4-jse.6",
+    "@weborigami/origami": "0.3.4-jse.7",
     "dotenv": "^16.4.5",
     "html": "github:jimniels/html",
     "html-minifier": "^4.0.0",
