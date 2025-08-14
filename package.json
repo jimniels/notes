@@ -7,8 +7,8 @@
     "postbuildz": "html-minifier --collapse-whitespace --remove-empty-attributes --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-attribute-quotes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true build/index.html -o build/index.html"
   },
   "dependencies": {
-    "@weborigami/dropbox": "0.0.11",
-    "@weborigami/origami": "0.3.4-jse.7",
+    "@weborigami/dropbox": "0.0.12",
+    "@weborigami/origami": "0.4.1",
     "dotenv": "^16.4.5",
     "html": "github:jimniels/html",
     "html-minifier": "^4.0.0",
