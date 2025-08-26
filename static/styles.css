@@ -150,7 +150,7 @@ body > footer {
   color: var(--c-highlight);
 }
 
-nav {
+.nav {
   position: sticky;
   top: 0;
   left: 0;
@@ -176,7 +176,7 @@ nav:after {
             body {
               margin: 0 0 0 2rem;
             }
-            nav {
+            .nav {
               left: 2rem;
             }
           }*/
@@ -191,19 +191,19 @@ nav a {
   background: var(--c-bg);
   transition: 0.3s ease transform;
 }
-nav a:active {
+.nav a:active {
   transform: scale(0.9);
 }
-nav a:first-child {
+.nav a:first-child {
   z-index: 100;
 }
 
-[data-open-theme] nav > a:first-child svg,
-nav a:hover svg {
+[data-open-theme] .nav > a:first-child svg,
+.nav a:hover svg {
   fill: var(--c-highlight);
 }
 
-nav svg {
+.nav svg {
   fill: var(--c-text-secondary);
   transition: 0.3s ease fill;
 }
