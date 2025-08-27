@@ -1,5 +1,6 @@
 (site) => <templates/Page.jse.html>({
   title: "Jim Nielsen’s Notes",
+  _headerHtml: site._headerHtml,
   children: Tree.map(
     site.items,
     (item) => <templates/Note.jse.html>(item)
