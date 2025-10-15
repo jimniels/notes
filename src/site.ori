@@ -1,13 +1,13 @@
 {
   // Private vars
-  (site) = <data/site-data.jse>
+  (site) = <data/site-data.ori>
   (site_truncated) = {...site, items: Tree.take(site.items, 20) }
 
   // Public files
   ...(<../static>),
   feed.json = Origami.json(site_truncated)
   feed.xml = Origami.rss(site_truncated)
-  index.html = <routes/index.jse>(site)
+  index.html = <routes/index.ori>(site)
 
   // n = tree:map(_postData/items, {
   //   key: (post) => post/id
