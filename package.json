@@ -4,7 +4,7 @@
   "scripts": {
     "start": "ori serve watch src, =debug src/site.ori",
     "build": "ori copy src/site.ori, clear files:build",
-    "check-diff-from-branch": "git checkout main && npm i && npm run build && mv build build-old && git checkout - && npm i && npm run build && npm run ori:changes",
+    "check-diff-from-branch": "rm -rf build-old &&git checkout main && npm i && npm run build && mv build build-old && git checkout - && npm i && npm run build && npm run ori:changes",
     "ori:changes": "ori changes build-old, build",
     "postbuildz": "html-minifier --collapse-whitespace --remove-empty-attributes --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-attribute-quotes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true build/index.html -o build/index.html"
   },
