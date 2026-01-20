@@ -1,4 +1,4 @@
 Tree.cache(
   package:@weborigami/dropbox(<dropbox-creds.js>())/notes
-  files:Origami.projectRoot()/cache
+  Origami.projectRoot()/cache
 )
