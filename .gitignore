@@ -6,3 +6,5 @@ build/
 build-old/
 .env
 cache/
+# Local Netlify folder
+.netlify
