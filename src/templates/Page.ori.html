@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- ( _ : { children: string, title: string } ) -->
+<!-- ( _ : { path: string, site: Site,children: string, title: string } ) -->
 <html lang="en" data-theme="Notes" id="top">
   <head>
     <meta charset="UTF-8" />
@@ -27,32 +27,41 @@
   </head>
   <body>
     <nav>
-      <a href="#top" title="Jump to top" aria-label="Jump to top"
-        >${<svgs/icon-jump.svg>}</a
-      >
+      <!-- prettier-ignore -->
       <a
-        href="#"
-        title="Jump to random note"
-        aria-label="Jump to random note"
-        class="js-shuffle"
+        href="/"
+        title="Jump to top"
+        aria-label="Jump to top"
+        aria-current="${_.path=== '/' ? 'page' : 'false'}"
+        >${<templates/icons.ori/home>}</a
       >
-        ${<svgs/icon-shuffle.svg>}
-      </a>
+      <!-- TODO: make this a <button> -->
+      <button
+        title="Shuffle (jump to random note)"
+        aria-label="Shuffle (jump to random note)"
+        id="js-shuffle"
+        style="view-transition-name: nav-icon-shuffle"
+      >
+        ${<templates/icons.ori/shuffle>}
+      </button>
 
       <a href="/feed.xml" title="RSS feed" arial-label="RSS feed"
-        >${<svgs/icon-rss.svg>}</a
+        >${<templates/icons.ori/rss>}</a
       >
 
-      <!-- <a href="/menu/" title="Menu" arial-label="Menu" style="margin-left: auto"
+      <!-- <a href="/menu/" title="Menu" arial-label="Menu"
         >${<svgs/icon-menu.svg>}</a
       > -->
     </nav>
+    ${_.path === '/' ? `
     <header>
       <h1>Notes</h1>
       <p>Quoting others & adding my 2¢ — a microblog.</p>
       ${<svgs/signature.svg>}
     </header>
+    ` : ''}
     <main>${_.children}</main>
+    ${_.path === '/' ? `
     <footer>
       Holy cow, you made it all the way to the bottom? Look at you 👏
       <br />
@@ -60,39 +69,17 @@
         >Here’s a special gift.</a
       >
     </footer>
+    <script src="/main.js" type="module"></script>
+    ` : ''}
+
     <script>
-      // Shuffle jump to link
-      const min = 0;
-      const max = document.querySelectorAll("article").length;
-      document.querySelector(".js-shuffle").addEventListener("click", (e) => {
+      const postsIds = ${JSON.stringify(Tree.plain(Tree.map(_.site.items, (post) => post.id)))};
+      // randomly select one of the postsIds
+      const randomPostId = postsIds[Math.floor(Math.random() * postsIds.length)];
+      document.querySelector("#js-shuffle")?.addEventListener("click", (e) => {
         e.preventDefault();
-        const rand = Math.floor(Math.random() * max) + min;
-        Array.from(document.querySelectorAll("article"))[rand].scrollIntoView();
+        window.location.href = "/n/" + randomPostId + "/";
       });
-
-      // Add 'Edit' link to each note for my own personal use
-      // But only if the global var has been set
-      let edit = window.localStorage.getItem("edit") === "true";
-      const urlEdit = new URL(window.location).searchParams.get("edit");
-      if (urlEdit) {
-        edit = urlEdit === "true";
-        window.localStorage.setItem("edit", edit);
-      }
-      if (edit) {
-        Array.from(document.querySelectorAll("article")).forEach((article) => {
-          const id = article.getAttribute("id");
-
-          // Create the link
-          const editLink = document.createElement("a");
-          editLink.href = "ia-writer://open?path=notes:" + id + ".md";
-          editLink.textContent = "Edit";
-
-          // Add the link to the list
-          const li = document.createElement("li");
-          li.appendChild(editLink);
-          article.querySelector("footer ul").appendChild(li);
-        });
-      }
     </script>
   </body>
 </html>

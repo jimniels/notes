@@ -1,3 +1,7 @@
+@view-transition {
+  navigation: auto;
+}
+
 :root[data-theme="Notes"] {
   --c-bg: #fff;
   --c-text: #001d32;
@@ -32,13 +36,13 @@ body {
   color: var(--c-text);
 }
 
-a {
+main a {
   color: inherit;
   text-decoration: none;
   border-bottom: 1px solid;
   transition: 0.1s ease color;
 }
-a:hover {
+main a:hover {
   color: var(--c-highlight);
   border-bottom: 2px solid var(--c-highlight);
 }
@@ -181,8 +185,7 @@ nav:after {
             }
           }*/
 
-nav a {
-  border: none !important;
+nav > * {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -190,20 +193,61 @@ nav a {
   box-shadow: 0 0 0 10px var(--c-bg);
   background: var(--c-bg);
   transition: 0.3s ease transform;
-}
-nav a:active {
-  transform: scale(0.9);
-}
-nav a:first-child {
-  z-index: 100;
+  width: 48px;
+  height: 48px;
+  position: relative;
+  color: inherit;
+  border: none;
 }
 
-[data-open-theme] nav > a:first-child svg,
-nav a:hover svg {
-  fill: var(--c-highlight);
+nav > *:after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--c-text-secondary);
+  opacity: 0.25;
+}
+
+nav > [aria-current="page"] {
+  opacity: 0.5;
+  border-color: transparent;
+  cursor: default !important;
+  pointer-events: none;
+}
+
+nav > :first-child {
+  z-index: 100;
+  margin-right: auto;
+}
+
+nav > *:hover {
+  color: inherit;
+  cursor: pointer;
 }
 
 nav svg {
-  fill: var(--c-text-secondary);
-  transition: 0.3s ease fill;
+  width: 24px;
+  height: 24px;
+}
+
+/* nav button svg {
+  view-transition-name: nav-icon;
+} */
+
+::view-transition-old(nav-icon-shuffle),
+::view-transition-new(nav-icon-shuffle) {
+  animation: nav-icon-spin 1.5s ease;
+}
+
+@keyframes nav-icon-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

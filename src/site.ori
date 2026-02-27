@@ -9,14 +9,31 @@
   feed.xml = Origami.rss(site_truncated)
   index.html = <routes/index.ori>(site)
 
-  // n = tree:map(_postData/items, {
-  //   key: (post) => post/id
-  //   value: (post) => {
-  //     index.html: ./templates/Page.ori.html({
-  //       title: post/title,
-  //       children: ./templates/Note.ori.html(post)
-  //     })
-  //   }
-  // })
+  shuffle = {
+    index.html: <routes/shuffle.ori.html>(site)
+  }
+
+  n = {
+    index.html: <templates/Page.ori.html>({
+    site,
+    title: "Archive | Jim Nielsen’s Notes",
+    children: Tree.map(
+      site.items,
+      (item) => <templates/Note.ori.html>(item)
+    )
+    path: "/n/"
+  })
+    ...Tree.map(site.items, {
+      key: (post) => post.id
+      value: (post) => {
+        index.html: templates/Page.ori.html({
+          title: post.title,
+          children: templates/Note.ori.html(post)
+          site: site,
+          path: `/n/${post.id}/`
+        })
+      }
+    })
+  }
 }
 
