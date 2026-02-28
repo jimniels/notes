@@ -35,12 +35,12 @@
         aria-current="${_.path=== '/' ? 'page' : 'false'}"
         >${<templates/icons.ori/home>}</a
       >
-      <!-- TODO: make this a <button> -->
+      <!-- prettier-ignore -->
       <button
         title="Shuffle (jump to random note)"
         aria-label="Shuffle (jump to random note)"
         id="js-shuffle"
-        style="view-transition-name: nav-icon-shuffle"
+        style="view-transition-name: ${_.path.startsWith('/n/') ? 'nav-icon-shuffle' : '__NONE__'}"
       >
         ${<templates/icons.ori/shuffle>}
       </button>
@@ -53,11 +53,20 @@
         >${<svgs/icon-menu.svg>}</a
       > -->
     </nav>
-    ${_.path === '/' ? `
+    ${_.path === '/' || _.path === '/n/' ? `
     <header>
       <h1>Notes</h1>
       <p>Quoting others & adding my 2¢ — a microblog.</p>
-      ${<svgs/signature.svg>}
+      ${<svgs/signature.svg>} ${(_.path === '/' || _.path === '/n/') ? `
+      <div class="archive-nav">
+        <a href="/" aria-current="${_.path === '/' ? 'page' : 'false'}"
+          >Latest</a
+        >
+        <a href="/n/" aria-current="${_.path === '/n/' ? 'page' : 'false'}"
+          >All</a
+        >
+      </div>
+      ` : ``}
     </header>
     ` : ''}
     <main>${_.children}</main>

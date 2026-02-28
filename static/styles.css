@@ -213,7 +213,7 @@ nav > *:after {
 }
 
 nav > [aria-current="page"] {
-  opacity: 0.5;
+  opacity: 0.125;
   border-color: transparent;
   cursor: default !important;
   pointer-events: none;
@@ -250,4 +250,28 @@ nav svg {
   to {
     transform: rotate(360deg);
   }
+}
+
+.archive-nav {
+  margin-top: 0.5rem;
+  margin-left: 2.25rem;
+  border-radius: 50px;
+  position: relative;
+  z-index: 1;
+}
+.archive-nav a {
+  text-align: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 5rem;
+  text-decoration: none;
+  color: var(--c-text-secondary);
+  transition: 0.3s ease color;
+}
+.archive-nav a:hover {
+}
+.archive-nav a[aria-current="page"] {
+  color: var(--c-bg);
+  background-color: var(--c-highlight);
+  cursor: default !important;
+  pointer-events: none;
 }
