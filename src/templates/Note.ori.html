@@ -1,5 +1,5 @@
 <!-- ( _ : {Note} ) -->
-<article id="${_.id}" data-tags="${_.tags}">
+<article id="${_.id}" data-tags="${_.tags ? _.tags.join(' ') : ''}">
   <header>
     <h1><a href="${_.external_url}">${_.title}</a></h1>
     <p class="byline">
