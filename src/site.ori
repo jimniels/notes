@@ -17,12 +17,16 @@
     index.html: <templates/Page.ori.html>({
     site,
     title: "Archive | Jim Nielsen’s Notes",
-    children: `<div style="margin-top:3rem; font-style: italic">Every note I’ve ever published is right here on this page, so use your browser’s built in search functionality to find the keywords you’re looking for.</div>${Tree.map(
-      site.items,
-      (item) => <templates/Note.ori.html>(item)
-    )}`
-    path: "/n/"
-  })
+    children: 
+      `<div style="margin-top:3rem; font-style: italic">
+        Every note I’ve published is here on this page. Use your browser’s built-in find functionality to search keywords on this page.
+      </div>
+      ${Tree.map(
+        site.items,
+        (item) => <templates/Note.ori.html>(item)
+      )}`
+      path: "/n/"
+    })
     ...Tree.map(site.items, {
       key: (post) => post.id
       value: (post) => {
