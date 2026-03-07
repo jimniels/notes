@@ -34,6 +34,13 @@
         aria-label="Home"
         aria-current="${_.path=== '/' ? 'page' : 'false'}"
         >${<templates/icons.ori/home>}</a>
+      ${_.path === '/' ? `<a
+        href="/n/"
+        title="Search"
+        aria-label="Search"
+        aria-current="${_.path === '/n/' ? 'page' : 'false'}"
+        >${<templates/icons.ori/search>}</a
+      >` : ''}
       <!-- prettier-ignore -->
       <button
         title="Shuffle (jump to random note)"
@@ -44,13 +51,6 @@
         ${<templates/icons.ori/shuffle>}
       </button>
 
-      <a
-        href="/n/"
-        title="Search"
-        aria-label="Search"
-        aria-current="${_.path === '/n/' ? 'page' : 'false'}"
-        >${<templates/icons.ori/search>}</a
-      >
       <a href="/feed.xml" title="RSS feed" arial-label="RSS feed"
         >${<templates/icons.ori/rss>}</a
       >

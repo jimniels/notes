@@ -39,5 +39,39 @@
       }
     })
   }
+
+
+  // (notesByDomain) = Tree.groupBy(site.items, (item) => item._external_url_domain)
+  // links = {
+  //   index.html: templates/Page.ori.html({
+  //     title: "Links | Jim Nielsen’s Notes",
+  //     children: `
+      
+  //     <ul>
+  //     ${
+  //       Tree.map(
+  //         notesByDomain,
+  //         (items, domain) => `
+  //           <li><a href="/links/${domain}/">${domain}</a> (${items.length})</li>
+  //         `
+  //       )
+  //     }
+  //     </ul>
+  //     `
+  //     site: site,
+  //     path: `/links/`
+  //   })
+  //   ...Tree.map(notesByDomain, {
+  //     key: (domain) => domain
+  //     value: (notes, domain) => {
+  //       index.html: templates/Page.ori.html({
+  //         title: `Links to ${domain} | Jim Nielsen’s Notes`,
+  //         children: Tree.map(notes, (note) => templates/Note.ori.html(note))
+  //         site: site,
+  //         path: `/links/${domain}/`
+  //       })
+  //     }
+  //   })
+  // }
 }
 
