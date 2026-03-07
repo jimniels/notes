@@ -18,7 +18,7 @@
     site,
     title: "Archive | Jim Nielsen’s Notes",
     children: 
-      `<div style="margin-top:3rem; font-style: italic">
+      `<div style="margin-top:4rem; font-style: italic">
         Every note I’ve published is here on this page. Use your browser’s built-in find functionality to search keywords on this page.
       </div>
       ${Tree.map(
