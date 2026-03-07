@@ -86,6 +86,13 @@ body > header svg {
   fill: var(--c-highlight);
   z-index: 0;
 }
+body > header p a {
+  color: inherit;
+  white-space: nowrap;
+}
+body > header p a:hover {
+  color: var(--c-highlight);
+}
 @keyframes blink {
   from,
   to {
@@ -213,10 +220,11 @@ nav > *:after {
 }
 
 nav > [aria-current="page"] {
-  opacity: 0.125;
+  opacity: 0;
   border-color: transparent;
   cursor: default !important;
   pointer-events: none;
+  visibility: hidden;
 }
 
 nav > :first-child {

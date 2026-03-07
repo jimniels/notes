@@ -34,13 +34,13 @@
         aria-label="Home"
         aria-current="${_.path=== '/' ? 'page' : 'false'}"
         >${<templates/icons.ori/home>}</a>
-      ${_.path === '/' ? `<a
+      <!-- <a
         href="/n/"
         title="Search"
         aria-label="Search"
         aria-current="${_.path === '/n/' ? 'page' : 'false'}"
         >${<templates/icons.ori/search>}</a
-      >` : ''}
+      > -->
       <!-- prettier-ignore -->
       <button
         title="Shuffle (jump to random note)"
@@ -62,7 +62,9 @@
     ${_.path === '/' ? `
     <header>
       <h1>Notes</h1>
-      <p>Quoting others & adding my 2¢ — a microblog.</p>
+      <p>
+        Quoting others & adding my 2¢ — a microblog. <a href="/n/">View all.</a>
+      </p>
       ${<svgs/signature.svg>} ${(_.path === '/' || _.path === '/n/') ? ` ` : ``}
     </header>
     ` : ''}
