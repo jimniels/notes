@@ -1,6 +1,6 @@
-@view-transition {
+/* @view-transition {
   navigation: auto;
-}
+} */
 
 :root[data-theme="Notes"] {
   --c-bg: #fff;

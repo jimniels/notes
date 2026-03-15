@@ -24,6 +24,25 @@
     <link rel="me" href="https://dribbble.com@jimniels" />
 
     <link rel="stylesheet" href="/styles.css" />
+
+    <!--
+      Handle redirects for old URLs on the home page
+      - Check if there's a hash in the url
+      - If there is, check if it matches this pattern: 
+        YYYY-MM-DDTHHMM, e.g. '#2012-07-09T0914'
+      - If it does, redirect to 'YYYY-MM-DD-HHMM'
+    -->
+    <script>
+      if (window.location.pathname === "/" && window.location.hash) {
+        const hash = window.location.hash.trim();
+        console.log("hash", hash);
+        const match = hash.match(/^#(\\d{4}-\\d{2}-\\d{2})T(\\d{4})$/);
+        if (match) {
+          const href = "/n/" + match[1] + "-" + match[2] + "/";
+          location.replace(href);
+        }
+      }
+    </script>
   </head>
   <body>
     <nav>
@@ -63,7 +82,7 @@
     <header>
       <h1>Notes</h1>
       <p>
-        Quoting others & adding my 2¢ — a microblog. <a href="/n/">View all.</a>
+        Quoting others & adding my 2¢ — a microblog.<!-- <a href="/n/">View all.</a> -->
       </p>
       ${<svgs/signature.svg>} ${(_.path === '/' || _.path === '/n/') ? ` ` : ``}
     </header>
@@ -79,11 +98,18 @@
     </footer>
     ` : ''}
 
+    <!-- Handles the edit link for my own personal use -->
     <script src="/edit-link.js" type="module"></script>
+
+    <!-- Handles the shuffle link -->
     <script>
+      // Get all the post IDs
       const postsIds = ${JSON.stringify(Tree.plain(Tree.map(_.site.items, (post) => post.id)))};
-      // randomly select one of the postsIds
+
+      // Randomly select one of the postsIds
       const randomPostId = postsIds[Math.floor(Math.random() * postsIds.length)];
+
+      // Add an event listener to the shuffle button
       document.querySelector("#js-shuffle")?.addEventListener("click", (e) => {
         e.preventDefault();
         window.location.href = "/n/" + randomPostId + "/";

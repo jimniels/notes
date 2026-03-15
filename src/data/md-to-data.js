@@ -10,10 +10,11 @@ import { parse } from "tldts";
  * @returns {import("../../types").Note}
  */
 export default function md_to_data(fileBuffer, fileName) {
+  fileName = fileName.replace("T", "-");
   const markdown = toString(fileBuffer);
   const id = path.basename(fileName, ".md");
   const date_published = extractDate(id);
-  const url = `https://notes.jim-nielsen.com/#${id}`;
+  const url = `https://notes.jim-nielsen.com/n/${id}/`;
 
   let title = "";
   let tags = undefined;
@@ -96,11 +97,11 @@ export default function md_to_data(fileBuffer, fileName) {
 }
 
 /**
- * @param {string} id - Should be in the format of `2021-08-01T1200`
+ * @param {string} id - Should be in the format of `2021-08-01T1200` or `2021-08-01-1200`
  * @returns {string} - ISO 8601 date string
  */
 function extractDate(id) {
-  const [date, time] = id.split("T");
+  const [date, time] = [id.slice(0, 10), id.slice(11)];
   const dateISO =
     date + "T" + time.slice(0, 2) + ":" + time.slice(2, 4) + "-0600"; // MDT -0600 from zulu
   return new Date(dateISO).toISOString();

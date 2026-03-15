@@ -1,6 +1,8 @@
 {
   // Private vars
   (site) = <data/site-data.ori>
+  // @TODO: filter out `2026-03-09` everything after this date
+  // — or convert to T in the feed
   (site_truncated) = {...site, items: Tree.take(site.items, 20) }
 
   // Public files
@@ -9,33 +11,12 @@
   feed.xml = Origami.rss(site_truncated)
   index.html = <routes/index.ori>(site)
 
-  shuffle = {
-    index.html: <routes/shuffle.ori.html>(site)
-  }
-
   n = {
-    index.html: <templates/Page.ori.html>({
-    site,
-    title: "Archive | Jim Nielsen’s Notes",
-    children: 
-      `<div style="margin-top:4rem; font-style: italic">
-        Every note I’ve published is here on this page. Use your browser’s built-in find functionality to search keywords on this page.
-      </div>
-      ${Tree.map(
-        site.items,
-        (item) => <templates/Note.ori.html>(item)
-      )}`
-      path: "/n/"
-    })
+    index.html: <routes/n.index.ori>(site)
     ...Tree.map(site.items, {
       key: (post) => post.id
       value: (post) => {
-        index.html: templates/Page.ori.html({
-          title: post.title,
-          children: templates/Note.ori.html(post)
-          site: site,
-          path: `/n/${post.id}/`
-        })
+        index.html: <routes/n.$id.ori>(site, post)
       }
     })
   }
