@@ -1,8 +1,6 @@
 {
   // Private vars
   (site) = <data/site-data.ori>
-  // @TODO: filter out `2026-03-09` everything after this date
-  // — or convert to T in the feed
   (site_truncated) = {...site, items: Tree.take(site.items, 20) }
 
   // Public files
@@ -14,7 +12,8 @@
   n = {
     index.html: <routes/n.index.ori>(site)
     ...Tree.map(site.items, {
-      key: (post) => post.id
+      // TODO: remove when all posts have been converted from `T` format
+      key: (post) => post.id.includes("T") ? post.id.replace("T", "-") : post.id
       value: (post) => {
         index.html: <routes/n.$id.ori>(site, post)
       }

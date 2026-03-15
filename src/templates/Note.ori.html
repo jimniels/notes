@@ -10,7 +10,7 @@
   <footer class="de-emphasized">
     <ul>
       <li>
-        <a href="/n/${_.id}/"
+        <a href="/n/${_.id.includes("T") ? _.id.replace("T", "-") : _.id}/"
           ><time datetime="${_.date_published}"
             >${formatDate.js(_.date_published)}</time
           ></a
