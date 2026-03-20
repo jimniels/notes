@@ -1,0 +1,14 @@
+(site) => <templates/Page.ori.html>({
+  site,
+  title: "Archive | Jim Nielsen’s Notes",
+  children: `
+    <div style="margin-top:4rem; font-style: italic">
+      Every note I’ve published is here on this page. Use your browser’s built-in find functionality to search keywords on this page.
+    </div>
+    ${Tree.map(
+      site.items,
+      (item) => <templates/Note.ori.html>(item)
+    )}
+  `
+  path: "/n/"
+})

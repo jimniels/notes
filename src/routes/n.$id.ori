@@ -1,0 +1,6 @@
+(site, post) => <templates/Page.ori.html>({
+  site,
+  title: `${post.title} | Jim Nielsen’s Notes`,
+  children: <templates/Note.ori.html>(post)
+  path: `/n/${post.id}/`
+})

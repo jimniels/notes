@@ -9,14 +9,49 @@
   feed.xml = Origami.rss(site_truncated)
   index.html = <routes/index.ori>(site)
 
-  // n = tree:map(_postData/items, {
-  //   key: (post) => post/id
-  //   value: (post) => {
-  //     index.html: ./templates/Page.ori.html({
-  //       title: post/title,
-  //       children: ./templates/Note.ori.html(post)
-  //     })
-  //   }
-  // })
+  n = {
+    index.html: <routes/n.index.ori>(site)
+    ...Tree.map(site.items, {
+      // TODO: remove when all posts have been converted from `T` format
+      key: (post) => post.id.includes("T") ? post.id.replace("T", "-") : post.id
+      value: (post) => {
+        index.html: <routes/n.$id.ori>(site, post)
+      }
+    })
+  }
+
+
+  // (notesByDomain) = Tree.groupBy(site.items, (item) => item._external_url_domain)
+  // links = {
+  //   index.html: templates/Page.ori.html({
+  //     title: "Links | Jim Nielsen’s Notes",
+  //     children: `
+      
+  //     <ul>
+  //     ${
+  //       Tree.map(
+  //         notesByDomain,
+  //         (items, domain) => `
+  //           <li><a href="/links/${domain}/">${domain}</a> (${items.length})</li>
+  //         `
+  //       )
+  //     }
+  //     </ul>
+  //     `
+  //     site: site,
+  //     path: `/links/`
+  //   })
+  //   ...Tree.map(notesByDomain, {
+  //     key: (domain) => domain
+  //     value: (notes, domain) => {
+  //       index.html: templates/Page.ori.html({
+  //         title: `Links to ${domain} | Jim Nielsen’s Notes`,
+  //         children: Tree.map(notes, (note) => templates/Note.ori.html(note))
+  //         site: site,
+  //         path: `/links/${domain}/`
+  //       })
+  //     }
+  //   })
+  // }
 }
 

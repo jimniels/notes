@@ -1,7 +1,9 @@
 (site) => <templates/Page.ori.html>({
+  site,
   title: "Jim Nielsen’s Notes",
   children: Tree.map(
     site.items,
     (item) => <templates/Note.ori.html>(item)
-  )
+  ),
+  path: "/"
 })
