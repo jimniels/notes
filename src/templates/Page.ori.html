@@ -61,14 +61,15 @@
         >${<templates/icons.ori/search>}</a
       > -->
       <!-- prettier-ignore -->
-      <button
+      <a
+        href="#"
         title="Shuffle (jump to random note)"
         aria-label="Shuffle (jump to random note)"
         id="js-shuffle"
         style="view-transition-name: ${_.path.startsWith('/n/') ? 'nav-icon-shuffle' : '__NONE__'}"
       >
         ${<templates/icons.ori/shuffle>}
-      </button>
+      </a>
 
       <a href="/feed.xml" title="RSS feed" arial-label="RSS feed"
         >${<templates/icons.ori/rss>}</a
@@ -98,11 +99,8 @@
     </footer>
     ` : ''}
 
-    <!-- Handles the edit link for my own personal use -->
-    <script src="/edit-link.js" type="module"></script>
-
     <!-- Handles the shuffle link -->
-    <script>
+    <script type="module">
       // Get all the post IDs
       // @TODO: remove when all posts have been converted from `T` format
       const postsIds = ${JSON.stringify(Tree.plain(Tree.map(_.site.items, (post) => post.id.includes("T") ? post.id.replace("T", "-") : post.id)))};
@@ -110,11 +108,12 @@
       // Randomly select one of the postsIds
       const randomPostId = postsIds[Math.floor(Math.random() * postsIds.length)];
 
-      // Add an event listener to the shuffle button
-      document.querySelector("#js-shuffle")?.addEventListener("click", (e) => {
-        e.preventDefault();
-        window.location.href = "/n/" + randomPostId + "/";
-      });
+      // Set the href
+      const $a = document.querySelector("#js-shuffle");
+      if ($a) $a.href = "/n/" + randomPostId + "/";
     </script>
+
+    <!-- Handles the edit link for my own personal use -->
+    <script src="/edit-link.js" type="module"></script>
   </body>
 </html>
