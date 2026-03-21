@@ -162,7 +162,7 @@ body > footer {
 }
 
 nav {
-  position: sticky;
+  /* position: sticky; */
   top: 0;
   left: 0;
   margin-left: -2rem;
