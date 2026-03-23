@@ -173,6 +173,7 @@ nav {
   padding: 1rem 0 0.25rem 2rem;
 }
 nav:after {
+  display: none;
   content: "";
   position: absolute;
   width: 100%;
