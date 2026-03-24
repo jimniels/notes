@@ -103,7 +103,7 @@
     <script type="module">
       // Get all the post IDs
       // @TODO: remove when all posts have been converted from `T` format
-      const postsIds = ${JSON.stringify(Tree.plain(Tree.map(_.site.items, (post) => post.id.includes("T") ? post.id.replace("T", "-") : post.id)))};
+      const postsIds = ${JSON.stringify(_.site._item_ids)};
 
       // Randomly select one of the postsIds
       const randomPostId = postsIds[Math.floor(Math.random() * postsIds.length)];
