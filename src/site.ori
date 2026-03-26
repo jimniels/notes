@@ -1,7 +1,7 @@
 {
   // Private vars
   (site) = <data/site-data.ori>
-  (site_truncated) = {...site, items: Tree.take(site.items, 20) }
+  (site_truncated) = {...site, items: Tree.take(site.items, 20), _item_ids: undefined }
 
   // Public files
   ...(<../static>),
@@ -9,6 +9,7 @@
   feed.xml = Origami.rss(site_truncated)
   index.html = <routes/index.ori>(site)
 
+  // Individual note routes
   n = {
     index.html: <routes/n.index.ori>(site)
     ...Tree.map(site.items, {
