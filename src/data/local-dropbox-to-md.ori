@@ -1,0 +1,7 @@
+// Note: macOS was putting a (hidden) `Icons?` file in the folder, which broke the tree
+// because Origami was picking up that file and including it as part of the tree
+// So we explicitly say we only want the `.md` files
+Tree.mask(
+  ~/Dropbox/notes/,
+  Tree.globKeys({ '*.md': true })
+)

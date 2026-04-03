@@ -9,13 +9,9 @@
     "postbuildz": "html-minifier --collapse-whitespace --remove-empty-attributes --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-attribute-quotes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true build/index.html -o build/index.html"
   },
   "dependencies": {
-    "@weborigami/dropbox": "0.0.15",
     "@weborigami/origami": "0.6.14",
     "dotenv": "^16.4.5",
-    "html": "github:jimniels/html",
-    "html-minifier": "^4.0.0",
     "marked": "^4.2.12",
-    "normalize.css": "^8.0.1",
     "p-limit": "^5.0.0",
     "tldts": "^7.0.17"
   }
