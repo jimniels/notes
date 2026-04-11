@@ -1,6 +1,8 @@
 {
   // Private vars
-  (site) = <data/site-data.ori>
+  (site): <node:process>.env.NODE_ENV === 'production'
+    ? <data/site-data.ori>
+    : https://notes.jim-nielsen.com/site.json
   (site_truncated) = {...site, items: Tree.take(site.items, 20), _item_ids: undefined }
 
   // Public files
@@ -8,6 +10,7 @@
   feed.json = Origami.json(site_truncated)
   feed.xml = Origami.rss(site_truncated)
   index.html = <routes/index.ori>(site)
+  site.json = Origami.json(site)
 
   // Individual note routes
   n = {
