@@ -1,8 +1,13 @@
 {
   // Private vars
-  (site): <node:process>.env.NODE_ENV === 'production'
+  (site): Dev.log(
+    <node:process>.env.NODE_ENV === 'production'
     ? <data/site-data.ori>
-    : https://notes.jim-nielsen.com/site.json
+    : https://notes.jim-nielsen.com/site.json,
+    <node:process>.env.NODE_ENV === 'production'
+    ? 'Building from local data...'
+    : 'Building from remote data...'
+  )
   (site_truncated) = {...site, items: Tree.take(site.items, 20), _item_ids: undefined }
 
   // Public files
