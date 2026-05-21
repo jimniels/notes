@@ -2,9 +2,10 @@
   site,
   title: "Archive | Jim Nielsen’s Notes",
   children: `
-    <div style="margin-top:4rem; font-style: italic">
-      Every note I’ve published is here on this page. Use your browser’s built-in find functionality to search keywords on this page.
-    </div>
+    <header style="margin-top:4rem; font-style: italic; display: flex; flex-direction: column; gap: 0">
+      <h1 style="margin:0;padding:0;">Notes Archive</h1>
+      <p style="margin:0;padding:0;">Every note I’ve ever published is right here, on this page. Use your browser’s built-in find functionality to hunt for keywords — that’s my solution for search :)</p>
+    </header>
     ${Tree.map(
       site.items,
       (item) => <templates/Note.ori.html>(item)

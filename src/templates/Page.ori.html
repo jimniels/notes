@@ -53,13 +53,13 @@
         aria-label="Home"
         aria-current="${_.path=== '/' ? 'page' : 'false'}"
         >${<templates/icons.ori/home>}</a>
-      <!-- <a
+      ${_.path === '/' ? `<a
         href="/n/"
-        title="Search"
-        aria-label="Search"
+        title="Archive"
+        aria-label="Archive"
         aria-current="${_.path === '/n/' ? 'page' : 'false'}"
-        >${<templates/icons.ori/search>}</a
-      > -->
+        >${<templates/icons.ori/archive>}</a
+      >` : ''}
       <!-- prettier-ignore -->
       <a
         href="#"
@@ -89,15 +89,6 @@
     </header>
     ` : ''}
     <main>${_.children}</main>
-    ${_.path === '/' ? `
-    <footer>
-      Holy cow, you made it all the way to the bottom? Look at you 👏
-      <br />
-      <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-        >Here’s a special gift.</a
-      >
-    </footer>
-    ` : ''}
 
     <!-- Handles the shuffle link -->
     <script type="module">
