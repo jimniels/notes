@@ -8,12 +8,22 @@
     ? 'Building from local data...'
     : 'Building from remote data...'
   )
-  (site_truncated) = {...site, items: Tree.take(site.items, 20), _item_ids: undefined }
+  (site_feed) = {
+    ...site,
+    _item_ids: undefined,
+    items: Tree.map(
+      Tree.take(site.items, 20)
+      (item) => {
+        ...item,
+        content_html: item.content_html + (item.external_url ? `<p><a href="${item.external_url}">🔗</a></p>` : '')
+      }
+    ),
+  }
 
   // Public files
   ...(<../static>),
-  feed.json = Origami.json(site_truncated)
-  feed.xml = Origami.rss(site_truncated)
+  feed.json = Origami.json(site_feed)
+  feed.xml = Origami.rss(site_feed)
   index.html = <routes/index.ori>(site)
   site.json = Origami.json(site)
 
