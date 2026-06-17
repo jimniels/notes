@@ -49,49 +49,54 @@
   </head>
   <body>
     <nav>
-      <!-- prettier-ignore -->
-      <a
-        href="/"
-        title="Home"
-        aria-label="Home"
-        aria-current="${_.path=== '/' ? 'page' : 'false'}"
-        >${<templates/icons.ori/home>}</a>
-      ${_.path === '/' ? `<a
-        href="/n/"
-        title="Archive"
-        aria-label="Archive"
-        aria-current="${_.path === '/n/' ? 'page' : 'false'}"
-        >${<templates/icons.ori/archive>}</a
-      >` : ''}
-      <!-- prettier-ignore -->
+      <div class="btn-group">
+        <a
+          href="/"
+          title="Home"
+          aria-label="Home"
+          aria-current="${_.path=== '/' ? 'page' : 'false'}"
+          >${<templates/icons.ori/home>}</a
+        >
+        <a
+          href="/links/"
+          title="Links"
+          aria-label="Links"
+          aria-current="${_.path === '/links/' ? 'page' : 'false'}"
+          >${<templates/icons.ori/links>}</a
+        >
+        <a
+          href="/n/"
+          title="Archive"
+          aria-label="Archive"
+          aria-current="${_.path === '/n/' ? 'page' : 'false'}"
+          >${<templates/icons.ori/archive>}</a
+        >
+        <a
+          href="/subscribe/"
+          title="Subscribe"
+          arial-label="Subscribe"
+          aria-current="${_.path === '/subscribe/' ? 'page' : 'false'}"
+          >${<templates/icons.ori/rss>}</a
+        >
+      </div>
+
       <a
         href="#"
         title="Shuffle (jump to random note)"
         aria-label="Shuffle (jump to random note)"
         id="js-shuffle"
-        style="view-transition-name: ${_.path.startsWith('/n/') ? 'nav-icon-shuffle' : '__NONE__'}"
+        class="btn"
+        style="
+          view-transition-name: $ {
+            _.path.startsWith('/n/')?'nav-icon-shuffle': '__NONE__';
+          }
+        "
       >
         ${<templates/icons.ori/shuffle>}
       </a>
-
-      <a href="/feed.xml" title="RSS feed" arial-label="RSS feed"
-        >${<templates/icons.ori/rss>}</a
-      >
-
-      <!-- <a href="/menu/" title="Menu" arial-label="Menu"
-        >${<svgs/icon-menu.svg>}</a
-      > -->
     </nav>
-    ${_.path === '/' ? `
-    <header>
-      <h1>Notes</h1>
-      <p>
-        Quoting others & adding my 2¢ — a microblog.<!-- <a href="/n/">View all.</a> -->
-      </p>
-      ${<svgs/signature.svg>} ${(_.path === '/' || _.path === '/n/') ? ` ` : ``}
-    </header>
-    ` : ''}
-    <main>${_.children}</main>
+
+    ${_.children}
 
     <!-- Handles the shuffle link -->
     <script type="module">

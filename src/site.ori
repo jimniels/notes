@@ -26,10 +26,13 @@
   feed.xml = Origami.rss(site_feed)
   index.html = <routes/index.ori>(site)
   site.json = Origami.json(site)
+  subscribe = {
+    index.html: <routes/subscribe.ori>(site)
+  }
 
   // Individual note routes
   n = {
-    index.html: <routes/n.index.ori>(site)
+    index.html: <routes/n.ori>(site)
     ...Tree.map(site.items, {
       // TODO: remove when all posts have been converted from `T` format
       key: (post) => post.id.includes("T") ? post.id.replace("T", "-") : post.id
@@ -40,37 +43,42 @@
   }
 
 
-  // (notesByDomain) = Tree.groupBy(site.items, (item) => item._external_url_domain)
-  // links = {
-  //   index.html: templates/Page.ori.html({
-  //     title: "Links | Jim Nielsen’s Notes",
-  //     children: `
-      
-  //     <ul>
-  //     ${
-  //       Tree.map(
-  //         notesByDomain,
-  //         (items, domain) => `
-  //           <li><a href="/links/${domain}/">${domain}</a> (${items.length})</li>
-  //         `
-  //       )
-  //     }
-  //     </ul>
-  //     `
-  //     site: site,
-  //     path: `/links/`
-  //   })
-  //   ...Tree.map(notesByDomain, {
-  //     key: (domain) => domain
-  //     value: (notes, domain) => {
-  //       index.html: templates/Page.ori.html({
-  //         title: `Links to ${domain} | Jim Nielsen’s Notes`,
-  //         children: Tree.map(notes, (note) => templates/Note.ori.html(note))
-  //         site: site,
-  //         path: `/links/${domain}/`
-  //       })
-  //     }
-  //   })
-  // }
+  (notesByDomain) = Tree.groupBy(site.items, (item) => item._external_url_domain)
+  links = {
+    index.html: templates/Page.ori.html({
+      title: "Links | Jim Nielsen’s Notes",
+      children: `
+      <header>
+        <h1>Links</h1>
+        <p>View my notes by which domain they link to.</p>
+      </header>
+      <main>
+      <ul>
+      ${
+        Tree.map(
+          Tree.reverse(Tree.sort(notesByDomain, (items) => items.length, true)),
+          (items, domain) => `
+            <li><a href="/links/${domain}/">${domain}</a> (${items.length})</li>
+          `
+        )
+      }
+      </ul>
+      </main>
+      `
+      site: site,
+      path: `/links/`
+    })
+    ...Tree.map(notesByDomain, {
+      key: (domain) => domain
+      value: (notes, domain) => {
+        index.html: templates/Page.ori.html({
+          title: `Links to ${domain} | Jim Nielsen’s Notes`,
+          children: `<header><h1>${domain}</h1><p>${notes.length.toLocaleString()} notes from this domain.</p></header><main>${Tree.map(notes, (note) => templates/Note.ori.html(note))}</main>`
+          site: site,
+          path: `/links/${domain}/`
+        })
+      }
+    })
+  }
 }
 

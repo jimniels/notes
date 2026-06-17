@@ -1,0 +1,17 @@
+(site) => <templates/Page.ori.html>({
+  site,
+  title: "Archive | Jim Nielsen’s Notes",
+  children: `
+    <header>
+      <h1>Archive</h1>
+      <p>Every note I’ve ever published is right here — all ${site.items.length.toLocaleString()} of them. Use your browser’s built-in find functionality to hunt for keywords — that’s my solution for search :)</p>
+    </header>
+    <main>
+    ${Tree.map(
+      site.items,
+      (item) => <templates/Note.ori.html>(item)
+    )}
+    </main>
+  `
+  path: "/n/"
+})
