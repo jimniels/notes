@@ -14,7 +14,7 @@
       (item) => <templates/Note.ori.html>(item)
     )}
     <p style="margin: 12rem 0 3rem; font-weight: bold;">
-      <a href="/n/" class="btn">View all notes in the archive</a>
+      <a href="/n/" class="btn">View all notes in the search</a>
     </p>
   </main>
   `,
