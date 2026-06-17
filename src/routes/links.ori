@@ -1,0 +1,23 @@
+({ site, notesByDomain }) => templates/Page.ori.html({
+  site,
+  path: `/links/`
+  title: "Links | Jim Nielsen’s Notes",
+  children: `
+  <header>
+    <h1>Notes by Link</h1>
+    <p>Filter notes by which site they link to.</p>
+  </header>
+  <main>
+    <ul>
+    ${
+      Tree.map(
+        Tree.reverse(Tree.sort(notesByDomain, (items) => items.length, true)),
+        (items, domain) => `
+          <li><a href="/links/${domain}/">${domain}</a> (${items.length})</li>
+        `
+      )
+    }
+    </ul>
+  </main>
+  `
+})

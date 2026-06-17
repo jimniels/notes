@@ -1,0 +1,12 @@
+({ site, domain, notes }) => templates/Page.ori.html({
+  site,
+  path: `/links/${domain}/`
+  title: `Links to ${domain} | Jim Nielsen’s Notes`,
+  children: `
+  <header>
+    <h1>${domain}</h1>
+    <p>${notes.length.toLocaleString()} notes from this site.</p>
+  </header>
+  <main>${Tree.map(notes, (note) => templates/Note.ori.html(note))}</main>
+  `
+})

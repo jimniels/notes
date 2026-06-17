@@ -45,38 +45,11 @@
 
   (notesByDomain) = Tree.groupBy(site.items, (item) => item._external_url_domain)
   links = {
-    index.html: templates/Page.ori.html({
-      title: "Links | Jim Nielsen’s Notes",
-      children: `
-      <header>
-        <h1>Links</h1>
-        <p>View my notes by which domain they link to.</p>
-      </header>
-      <main>
-      <ul>
-      ${
-        Tree.map(
-          Tree.reverse(Tree.sort(notesByDomain, (items) => items.length, true)),
-          (items, domain) => `
-            <li><a href="/links/${domain}/">${domain}</a> (${items.length})</li>
-          `
-        )
-      }
-      </ul>
-      </main>
-      `
-      site: site,
-      path: `/links/`
-    })
+    index.html: <routes/links.ori>({ site, notesByDomain })
     ...Tree.map(notesByDomain, {
-      key: (domain) => domain
+      key: (notes, domain) => domain
       value: (notes, domain) => {
-        index.html: templates/Page.ori.html({
-          title: `Links to ${domain} | Jim Nielsen’s Notes`,
-          children: `<header><h1>${domain}</h1><p>${notes.length.toLocaleString()} notes from this domain.</p></header><main>${Tree.map(notes, (note) => templates/Note.ori.html(note))}</main>`
-          site: site,
-          path: `/links/${domain}/`
-        })
+        index.html: <routes/links.$id.ori>({ site, domain, notes })
       }
     })
   }

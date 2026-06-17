@@ -115,6 +115,9 @@ article > header > p {
   letter-spacing: 0.05rem;
   margin-bottom: 0;
 }
+article > header > p a {
+  border-color: transparent;
+}
 article > footer {
   color: var(--c-text-secondary);
   font-size: 0.8125rem;

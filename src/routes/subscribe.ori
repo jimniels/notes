@@ -4,7 +4,7 @@
   path: "/subscribe/",
   children: `
   <header>
-    <h1>Subscribe</h1>
+    <h1>Subscribe to My Notes</h1>
     <p>
       Yes, yes! You know about RSS? You have done well. Come, I have been expecting you.
     </p>
