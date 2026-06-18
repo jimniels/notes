@@ -7,7 +7,7 @@
 ---
 <article id="${_.id}" data-tags="${_.tags ? _.tags.join(' ') : ''}">
   <header>
-    <h1><a href="${_.external_url}">${_.title}</a></h1>
+    <h1><a href="${_.external_url}">${_.title}</a> ${<templates/icons.ori/external-link>}</h1>
     <p class="byline">
       <a class="highlight" href="/links/${_._external_url_domain}/">${_._external_url_domain}</a>
     </p>

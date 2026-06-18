@@ -6,12 +6,12 @@
   <header>
     <h1>Jim Nielsen’s Notes</h1>
     <p>
-      Quoting others & adding my 2¢ — a microblog by <a href="https://jim-nielsen.com">me</a>.
+      Quoting others & adding my 2¢ — a link blog by <a href="https://jim-nielsen.com">me</a>.
     </p>
   </header>
   <main>
     ${Tree.map(
-      Tree.take(site.items, 3),
+      Tree.take(site.items, 10),
       (item) => <templates/Note.ori.html>(item)
     )}
     <p style="margin: 12rem 0 3rem; font-weight: bold;">
