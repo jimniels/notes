@@ -163,7 +163,7 @@ article h1 {
   letter-spacing: 0.0125rem;
   margin-top: 0.25rem;
   margin-bottom: 0;
-  white-space: nowrap;
+  white-space: break-spaces;
 }
 article :is(h1, h2, h3, h4) {
   font-size: 1rem;
