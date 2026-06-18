@@ -208,21 +208,12 @@ nav a[aria-current="page"] {
   pointer-events: none;
 }
 
-/*@media screen and (min-width: 600px) {
-            body {
-              margin: 0 0 0 2rem;
-            }
-            nav {
-              left: 2rem;
-            }
-          }*/
-
 .btn-group,
 .btn {
   background: var(--c-bg);
   border: 1px solid var(--c-fg) !important;
   border-radius: 50px;
-  box-shadow: 0 3px 10px var(--c-shadow);
+  box-shadow: 0 5px 15px var(--c-shadow);
   height: var(--btn-height);
   position: relative;
   color: inherit;
