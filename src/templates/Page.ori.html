@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- ( _ : { path: string, site: Site,children: string, title: string } ) -->
+<!-- ( _ : { path: string, site: Site,children: string, title: string, head?: string } ) -->
 <html lang="en" data-theme="Notes" id="top">
   <head>
     <meta charset="UTF-8" />
@@ -46,6 +46,8 @@
         }
       }
     </script>
+
+    ${_.head ? _.head : ''}
   </head>
   <body>
     <nav>

@@ -5,7 +5,7 @@
   children: `
   <header>
     <h1>${domain}</h1>
-    <p>${notes.length.toLocaleString()} notes from this site.</p>
+    <p>${notes.length.toLocaleString()} notes link to this site.</p>
   </header>
   <main>${Tree.map(notes, (note) => templates/Note.ori.html(note))}</main>
   `

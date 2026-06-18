@@ -2,22 +2,71 @@
   site,
   path: `/links/`
   title: "Links | Jim Nielsen’s Notes",
+  head: `<style>
+  .site-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  .site-list li {
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 1.5rem;
+  }
+  .site-list li span {
+    margin-left: auto;
+    color: var(--c-text-secondary);
+  }
+  details {
+    margin: 4rem 0;
+  }
+  details summary {
+    margin-bottom: 0.5rem;
+  }
+  </style>`
   children: `
   <header>
-    <h1>Notes by Link</h1>
+    <h1>Links</h1>
     <p>Filter notes by which site they link to.</p>
   </header>
   <main>
-    <ul>
+    <ul class="site-list">
     ${
       Tree.map(
-        Tree.reverse(Tree.sort(notesByDomain, (items) => items.length, true)),
+        Tree.reverse(
+          Tree.sort(
+            Tree.filter(notesByDomain, (items) => items.length > 1),
+            (items) => items.length, true
+          )
+        ),
         (items, domain) => `
-          <li><a href="/links/${domain}/">${domain}</a> (${items.length})</li>
+          <li>
+            <img src="https://www.google.com/s2/favicons?domain=${domain}" alt="${domain}" width="16" height="16" />
+            <a href="/links/${domain}/">${domain}</a>
+            <span>${items.length}</span>
+          </li>
         `
       )
     }
     </ul>
+    <details>
+      <summary>Sites with just one note</summary>
+      <ul class="site-list">
+        ${
+          Tree.map(
+            Tree.filter(notesByDomain, (items) => items.length === 1),
+            (items, domain) => `
+              <li>
+              <img src="https://www.google.com/s2/favicons?domain=${domain}" alt="${domain}" width="16" height="16" />
+              <a href="/links/${domain}/">${domain}</a>
+              </li>
+            `
+          )
+        }
+      </ul>
+    </details>
   </main>
   `
 })

@@ -2,17 +2,27 @@
   site,
   title: "Subscribe | Jim Nielsen’s Notes",
   path: "/subscribe/",
+  head: `<style>
+  main ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    gap: 0.5rem;
+  }
+  </style>`,
   children: `
   <header>
     <h1>Subscribe</h1>
     <p>
-      Yes, yes! You know about RSS? You have done well. Come, I have been expecting you.
+      Ah, a new subscriber approaches. Come. I have been expecting you.
     </p>
   </header>
   <main>
     <ul>
-      <li><a href="/feed.json">JSON Feed</a></li>
-      <li><a href="/feed.xml">RSS Feed</a></li>
+      <li><a class="" href="/feed.json">JSON Feed</a></li>
+      <li><a class="" href="/feed.xml">RSS Feed</a></li>
     </ul>
   </main>
   `

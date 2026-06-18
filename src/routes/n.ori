@@ -4,7 +4,7 @@
   children: `
     <header>
       <h1>Search</h1>
-      <p>Every note I’ve ever published is right here — all ${site.items.length.toLocaleString()} of them. Use your browser’s built-in find functionality to hunt for keywords — that’s my solution for search :)</p>
+      <p>All ${site.items.length.toLocaleString()} notes I’ve ever published are right here. Use your browser’s “Find” functionality to hunt for keywords — that’s my solution for search :)</p>
     </header>
     <main>
     ${Tree.map(
