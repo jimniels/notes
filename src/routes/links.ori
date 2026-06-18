@@ -15,6 +15,9 @@
     gap: 0.5rem;
     height: 1.5rem;
   }
+  .site-list li a:hover + span {
+    color: var(--c-highlight);
+  }
   .site-list li span {
     margin-left: auto;
     color: var(--c-text-secondary);
