@@ -52,27 +52,6 @@ Each markdown file gets parsed into a JSON feed item:
 
 And then templates produce the `index.html` file (along with an XML and JSON feed).
 
-## URLs
-
-All content is loaded into one giant HTML file.
-
-Why one big file? Because I want to be able to search/filter all notes at once and one page makes that easy. Plus, content should always be written/formatted as text (no embedded images, videos, etc., those must all be linked).
-
-Individual posts are anchor linked in the main file:
-
-- `notes.jim-nielsen.com/#2022-05-01T1200`
-
-Perhaps one day they can have their own URLs
-
-- `notes.jim-nielsen.com/2022-05-01T1200`
-
-Will require:
-
-1. Port all exisiting reading notes into new repository as `.md` files
-2. Script that gets all files, parses them into `db.json` file, and turns them into static files (and feed files)
-3. Add a thing to all reading notes posts that indicate they are now reposted on `notes.jim-nielsen.com` — or do a redirect? from old blog reading notes posts to new `notes.jim-nielsen.com` - this might be a little weird...
-4.
-
 ## Notes to self
 
 The very first file (post) on `notes.jim-nielsen.com` was `2023-02-02T2100.md`. All files _before_ that were ported from my old blog’s reading notes.
