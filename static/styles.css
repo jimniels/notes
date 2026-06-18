@@ -48,6 +48,11 @@ body {
   width: 90%;
   margin: 0 auto;
   color: var(--c-text);
+
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
 }
 
 main a {
@@ -66,7 +71,6 @@ pre {
 }
 
 body > header {
-  margin: 4rem 0 0;
   position: relative;
 }
 body > header h1 {
@@ -154,8 +158,7 @@ blockquote {
   padding-left: calc(1.618rem / 2);
 }
 article {
-  margin-bottom: 5rem;
-  padding-top: 5rem; /* enough space when anchoring to a thing */
+  padding-bottom: 5rem; /* enough space when anchoring to a thing */
   overflow-wrap: break-word;
 }
 
@@ -178,7 +181,6 @@ nav {
   gap: 1rem;
   z-index: 10;
   background: var(--c-bg);
-  padding: 1rem 0 0.25rem 0;
   display: flex;
   justify-content: space-between;
   align-items: center;

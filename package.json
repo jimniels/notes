@@ -6,6 +6,7 @@
     "build": "ori copy src/site.ori, clear files:build",
     "diff-with-main": "rm -rf build-old && git checkout main && npm i && npm run build && mv build build-old && git checkout - && npm i && npm run build && npm run ori:changes",
     "deploy": "git pull && npm ci && NODE_ENV=production netlify deploy --build --prod",
+    "deploy:preview": "netlify deploy --build --alias $(git branch --show-current)",
     "ori:changes": "ori changes build-old, build",
     "postbuildz": "html-minifier --collapse-whitespace --remove-empty-attributes --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-attribute-quotes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true build/index.html -o build/index.html"
   },

@@ -1,4 +1,10 @@
-<!-- ( _ : {Note} ) -->
+---
+/**
+ * @param _ : {Note}
+ * @returns {string}
+ */
+(_) => _template()
+---
 <article id="${_.id}" data-tags="${_.tags ? _.tags.join(' ') : ''}">
   <header>
     <h1><a href="${_.external_url}">${_.title}</a></h1>
