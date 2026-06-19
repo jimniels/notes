@@ -34,8 +34,7 @@
   n = {
     index.html: <routes/n.ori>(site)
     ...Tree.map(site.items, {
-      // TODO: remove when all posts have been converted from `T` format
-      key: (post) => post.id.includes("T") ? post.id.replace("T", "-") : post.id
+      key: (post) => post.id
       value: (post) => {
         index.html: <routes/n.$id.ori>(site, post)
       }

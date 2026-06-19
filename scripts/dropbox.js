@@ -81,8 +81,6 @@ export async function getFiles(path) {
     const files = await listFilesInFolder(path);
     console.timeEnd("Get list of files");
 
-    // TODO: filter by .md files?
-
     // Get the contents of each file
     console.time("Download files");
     let filesByName = {};
