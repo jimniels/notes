@@ -42,6 +42,9 @@
     })
   }
 
+  shuffle = {
+    index.html: <routes/shuffle.ori>({ site })
+  }
 
   (notesByDomain) = Tree.groupBy(site.items, (item) => item._external_url_domain)
   links = {

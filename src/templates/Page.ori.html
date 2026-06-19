@@ -83,36 +83,18 @@
       </div>
 
       <a
-        href="#"
-        title="Shuffle (jump to random note)"
-        aria-label="Shuffle (jump to random note)"
-        id="js-shuffle"
+        href="/shuffle/"
+        title="Shuffle"
+        aria-label="Shuffle"
         class="btn"
-        style="
-          view-transition-name: $ {
-            _.path.startsWith('/n/')?'nav-icon-shuffle': '__NONE__';
-          }
-        "
+        aria-current="${_.path === '/shuffle/' ? 'page' : 'false'}"
       >
-        ${<templates/icons.ori/shuffle>}
+        ${_.path === '/shuffle/' ? `${<templates/icons.ori/loading>} Shuffling`
+        : <templates/icons.ori/shuffle>}
       </a>
     </nav>
 
     ${_.children}
-
-    <!-- Handles the shuffle link -->
-    <script type="module">
-      // Get all the post IDs
-      // @TODO: remove when all posts have been converted from `T` format
-      const postsIds = ${JSON.stringify(_.site._item_ids)};
-
-      // Randomly select one of the postsIds
-      const randomPostId = postsIds[Math.floor(Math.random() * postsIds.length)];
-
-      // Set the href
-      const $a = document.querySelector("#js-shuffle");
-      if ($a) $a.href = "/n/" + randomPostId + "/";
-    </script>
 
     <!-- Handles the edit link for my own personal use -->
     <script src="/edit-link.js" type="module"></script>

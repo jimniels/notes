@@ -1,0 +1,48 @@
+({ site }) => templates/Page.ori.html({
+  site,
+  title: "Shuffle",
+  path: "/shuffle/",
+  head: `<style>
+    nav a[aria-current="page"] {
+      border: none;
+      text-decoration: none;
+      text-indent: -9999px;
+    }
+    @media (min-width: 400px) {
+      nav a[aria-current="page"] {
+        text-indent: 0;
+      }
+      nav a[aria-current="page"] svg {
+        margin-right: 0.5rem;
+      }
+    }
+    nav a[aria-current="page"] svg {
+      animation: spin 1.75s linear infinite;
+      transform-origin: center center;
+    }
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    </style>
+  `,
+  children: `
+    <main>
+    <noscript>You must enable JavaScript to use this feature.</noscript>
+    </main>
+    <script type="module">
+      // Get all the post IDs
+      const postsIds = ${JSON.stringify(site._item_ids)};
+
+      // Randomly select one of the postsIds
+      const randomPostId = postsIds[Math.floor(Math.random() * postsIds.length)];
+
+      // Artificial delay and set the href
+      setTimeout(() => {window.location.href = "/n/" + randomPostId + "/";}, 600);
+    </script>
+  `
+})
