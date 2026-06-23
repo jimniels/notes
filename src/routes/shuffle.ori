@@ -41,8 +41,8 @@
       // Randomly select one of the postsIds
       const randomPostId = postsIds[Math.floor(Math.random() * postsIds.length)];
 
-      // Artificial delay and set the href
-      setTimeout(() => {window.location.href = "/n/" + randomPostId + "/";}, 600);
+      // Artificial delay and navigate, replacing /shuffle in history
+      setTimeout(() => {window.location.replace("/n/" + randomPostId + "/");}, 600);
     </script>
   `
 })
