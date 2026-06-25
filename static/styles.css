@@ -1,6 +1,16 @@
-/* @view-transition {
+@view-transition {
   navigation: auto;
-} */
+}
+
+/*
+  Keep the page itself feeling like a normal MPA load (no full-page
+  cross-fade); only our named elements (e.g. the nav highlight) animate.
+*/
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
 
 :root[data-theme="Notes"] {
   --c-bg: #fff;
@@ -70,14 +80,14 @@ pre {
   overflow: scroll;
 }
 
-body > header {
+.content > header {
   position: relative;
 }
-body > header h1 {
+.content > header h1 {
   line-height: 1;
   font-size: 1.3125rem;
 }
-body > header h1:after {
+.content > header h1:after {
   content: "";
   width: 0.125rem;
   height: 1.25em;
@@ -87,19 +97,19 @@ body > header h1:after {
   top: 0.2em;
   animation: 1s blink step-end infinite;
 }
-body > header > :is(h1, p) {
+.content > header > :is(h1, p) {
   margin: 0.5rem 0;
   position: relative;
   z-index: 1;
 }
-body > header p {
+.content > header p {
   color: var(--c-text-secondary);
 }
-body > header p a {
+.content > header p a {
   color: inherit;
   white-space: nowrap;
 }
-body > header p a:hover {
+.content > header p a:hover {
   color: var(--c-highlight);
 }
 @keyframes blink {
@@ -264,10 +274,98 @@ nav a[aria-current="page"] {
   align-items: center;
   justify-content: center;
   border-radius: 50px;
+  position: relative;
 }
 .btn-group > [aria-current="page"] {
-  background-color: var(--c-fg);
   color: var(--c-highlight);
+  isolation: isolate;
+}
+/*
+  Render the active highlight as its own box so we can give *just* the
+  background a view-transition-name. Because only one nav item is active at
+  a time, the name is unique per page: the browser morphs it (slides) when
+  it exists on both the old and new page, and fades it out when the next
+  page has no active nav item.
+*/
+.btn-group > [aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--c-fg);
+  border-radius: 50px;
+  view-transition-name: nav-highlight;
+}
+
+/*
+  Naming only the highlight lifts it into its own view-transition snapshot,
+  which is painted above the base page snapshot (where the icons live) — so
+  during the morph the highlight would float *over* the icons, inverting its
+  z-index: -1. Fix: lift each icon into its own group too (they're on every
+  page, so they just stay put) and stack the icon groups above the highlight.
+*/
+.btn-group a[href="/"] svg {
+  view-transition-name: nav-icon-home;
+}
+.btn-group a[href="/links/"] svg {
+  view-transition-name: nav-icon-links;
+}
+.btn-group a[href="/n/"] svg {
+  view-transition-name: nav-icon-search;
+}
+.btn-group a[href="/subscribe/"] svg {
+  view-transition-name: nav-icon-subscribe;
+}
+
+::view-transition-group(nav-highlight) {
+  animation-duration: 0.3s;
+  animation-timing-function: ease;
+  z-index: 1;
+}
+::view-transition-group(nav-icon-home),
+::view-transition-group(nav-icon-links),
+::view-transition-group(nav-icon-search),
+::view-transition-group(nav-icon-subscribe) {
+  z-index: 2;
+}
+
+/*
+  Slide + fade the page content on every navigation: the outgoing content
+  drops ~100px while fading out, and the incoming content rises from 100px
+  below while fading in.
+
+  We wrap header + main in a single `.content` group (rather than naming each)
+  so the snapshot's top position is identical on every page — always right
+  after the nav. If we named `main` directly it would morph between pages that
+  do/don't have a header (e.g. home -> shuffle), dragging the outgoing main
+  *up* and fighting our downward slide. The nav stays put because it lives in
+  `root`, which we don't animate.
+*/
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  view-transition-name: page-content;
+}
+
+::view-transition-old(page-content) {
+  animation: 0.3s ease both slide-section-out;
+}
+::view-transition-new(page-content) {
+  animation: 0.3s ease both slide-section-in;
+}
+
+@keyframes slide-section-out {
+  to {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+}
+@keyframes slide-section-in {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
 }
 
 nav svg {
