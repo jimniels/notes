@@ -7,10 +7,10 @@
 ---
 <article id="${_.id}" data-tags="${_.tags ? _.tags.join(' ') : ''}">
   <header>
-    <h1><a href="${_.external_url}">${_.title}</a> ${<templates/icons.ori/external-link>}</h1>
-    <p class="byline">
-      <a class="highlight" href="/links/${_._external_url_domain}/">${_._external_url_domain}</a>
-    </p>
+    <a href="${_.external_url}">
+      <h1>${_.title} ${<templates/icons.ori/external-link>}</h1>
+      <p>${_._external_url_domain}</p>
+    </a>
   </header>
   ${_.content_html}
   <footer class="de-emphasized">
@@ -21,6 +21,9 @@
             >${formatDate.js(_.date_published)}</time
           ></a
         >
+      </li>
+      <li>
+        <a href="/links/${_._external_url_domain}/">${_._external_url_domain}</a>
       </li>
 
       ${/*_.tags ? Tree.map(_.tags, (tag) => `

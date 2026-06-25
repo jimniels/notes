@@ -117,9 +117,6 @@ article > header > p {
   font-size: 0.875rem;
   margin-bottom: 0;
 }
-article > header > p a {
-  border-color: transparent;
-}
 article > footer {
   color: var(--c-text-secondary);
   font-size: 0.8125rem;
@@ -151,9 +148,11 @@ article > footer > ul li:not(:last-child):after {
   padding: 0 0.25rem;
 }
 
-article header {
+article header a {
   display: flex;
   flex-direction: column;
+  gap: 0;
+  border: none !important;
 }
 article header h1 {
   order: 2;
@@ -161,9 +160,13 @@ article header h1 {
 article h1 {
   text-transform: uppercase;
   letter-spacing: 0.0125rem;
-  margin-top: 0.25rem;
-  margin-bottom: 0;
+  margin: 0;
   white-space: break-spaces;
+}
+article header p {
+  color: var(--c-highlight);
+  font-size: 0.875rem;
+  margin: 0;
 }
 article :is(h1, h2, h3, h4) {
   font-size: 1rem;
