@@ -36,7 +36,7 @@
     </main>
     <script type="module">
       // Get all the post IDs
-      const postsIds = ${JSON.stringify(site._item_ids)};
+      const postsIds = ${JSON.stringify(Object.values(site._item_ids_by_domain).flat())};
 
       // Randomly select one of the postsIds
       const randomPostId = postsIds[Math.floor(Math.random() * postsIds.length)];

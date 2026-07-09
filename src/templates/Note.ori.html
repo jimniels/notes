@@ -1,10 +1,15 @@
 ---
 /**
- * @param _ : {Note}
+ * @param {Note} : _
+ * @param {Object} [options={}]
  * @returns {string}
  */
-(_) => _template()
+({ note: _, site, hideDomain = false }) => {
+  noteCountByDomain = site._item_ids_by_domain[_._external_url_domain].length
+  return: _template()
+}.return
 ---
+
 <article id="${_.id}" data-tags="${_.tags ? _.tags.join(' ') : ''}">
   <header>
     <a href="${_.external_url}">
@@ -14,21 +19,16 @@
   </header>
   ${_.content_html}
   <footer class="de-emphasized">
-    <ul>
-      <li>
-        <a href="/n/${_.id.includes("T") ? _.id.replace("T", "-") : _.id}/"
-          ><time datetime="${_.date_published}"
-            >${formatDate.js(_.date_published)}</time
-          ></a
-        >
-      </li>
-      <li>
-        <a href="/links/${_._external_url_domain}/">${_._external_url_domain}</a>
-      </li>
-
-      ${/*_.tags ? Tree.map(_.tags, (tag) => `
-      <li>#${tag}</li>
-      `) : ""*/''}
-    </ul>
+    <p>
+      Published
+      <a href="/n/${_.id}/"
+        ><time datetime="${_.date_published}"
+          >${formatDate.js(_.date_published)}</time
+        ></a
+      >${!hideDomain && noteCountByDomain > 1 ? ` &nbsp;·&nbsp;
+      ${noteCountByDomain} total note${noteCountByDomain > 1 ? "s" : ""} from
+      <a href="/links/${_._external_url_domain}/">${_._external_url_domain}</a>`
+      : ""}
+    </p>
   </footer>
 </article>

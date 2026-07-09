@@ -1,6 +1,6 @@
 (site, post) => <templates/Page.ori.html>({
   site,
   title: `${post.title} | Jim Nielsen’s Notes`,
-  children: `<main>${<templates/Note.ori.html>(post)}</main>`
+  children: `<main>${<templates/Note.ori.html>({ note: post, site })}</main>`
   path: `/n/${post.id}/`
 })

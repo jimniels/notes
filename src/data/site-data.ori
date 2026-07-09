@@ -11,6 +11,12 @@
   feed_url: "https://notes.jim-nielsen.com/feed.json"
   items: <md-to-data.ori>/
 
-  // For use elsewhere in the generation of the site, just grab the IDs
-  _item_ids: Tree.plain(Tree.map(items, (post) => post.id.includes("T") ? post.id.replace("T", "-") : post.id))
+  // For use in looking up the IDs of items by domain, e.g.
+  // { "youtube.com": ["…", "…", "…"], "twitter.com": ["…"], ... }
+  _item_ids_by_domain: Tree.plain(
+    Tree.map(
+      Tree.groupBy(items, (item) => item._external_url_domain),
+      (items, domain) => Tree.map(items, (item) => item.id)
+    )
+  )
 }

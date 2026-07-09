@@ -12,7 +12,7 @@
   <main>
     ${Tree.map(
       Tree.take(site.items, 10),
-      (item) => <templates/Note.ori.html>(item)
+      (item) => <templates/Note.ori.html>({ note: item, site })
     )}
     <p style="margin: 12rem 0 3rem; font-weight: bold;">
       <a href="/n/">View all notes</a>

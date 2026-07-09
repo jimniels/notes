@@ -9,8 +9,13 @@
     : 'Building from remote data...'
   )
   (site_feed) = {
+    // Start with the site data
     ...site,
-    _item_ids: undefined,
+
+    // Exclude stuff we don't need in the feed
+    _item_ids_by_domain: undefined,
+
+    // Add link to the original source in the content
     items: Tree.map(
       Tree.take(site.items, 20)
       (item) => {

@@ -9,7 +9,7 @@
     <main>
     ${Tree.map(
       site.items,
-      (item) => <templates/Note.ori.html>(item)
+      (item) => <templates/Note.ori.html>({ note: item, site })
     )}
     </main>
   `
