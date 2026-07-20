@@ -15,9 +15,9 @@ if (edit) {
     editLink.href = "ia-writer://open?path=notes:" + id + ".md";
     editLink.textContent = "Edit";
 
-    // Add the link to the list
-    const li = document.createElement("li");
-    li.appendChild(editLink);
-    article.querySelector("footer ul").appendChild(li);
+    // Append " · Edit" to the footer paragraph
+    const footerParagraph = article.querySelector("footer p");
+    footerParagraph.appendChild(document.createTextNode("\u00A0·\u00A0 "));
+    footerParagraph.appendChild(editLink);
   });
 }
