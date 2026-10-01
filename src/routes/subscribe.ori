@@ -16,14 +16,12 @@
   <header>
     <h1>Subscribe</h1>
     <p>
-      Ah, a new subscriber approaches. Come. I have been expecting you.
+      Copy/paste the link to this page in your feed reader for <a href="https://blog.jim-nielsen.com/2021/automatically-discoverable-rss-feeds/">automatic discovery</a>.
+    </p>
+    <p>
+      Or manually copy/paste the <a href="/feed.json">JSON</a> or <a href="/feed.xml">RSS</a> feed links.
     </p>
   </header>
-  <main>
-    <ul>
-      <li><a class="" href="/feed.json">JSON Feed</a></li>
-      <li><a class="" href="/feed.xml">RSS Feed</a></li>
-    </ul>
-  </main>
+
   `
 })
