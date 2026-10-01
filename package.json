@@ -11,6 +11,7 @@
     "postbuildz": "html-minifier --collapse-whitespace --remove-empty-attributes --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-attribute-quotes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true build/index.html -o build/index.html"
   },
   "dependencies": {
+    "@weborigami/async-tree": "^0.6.14",
     "@weborigami/origami": "0.6.14",
     "dotenv": "^16.4.5",
     "marked": "^4.2.12",
